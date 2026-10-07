@@ -40,8 +40,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       {/* Property Image with Aspect 4:3 */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          alt={property.imageAlt || property.title}
-          src={property.image}
+          alt={property.title}
+          src={property.images[0]}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
 

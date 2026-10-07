@@ -24,9 +24,7 @@ export type Database = {
           display_location: string
           formatted_price: string | null
           id: string
-          image: string
-          image_alt: string
-          images?: string[] | null
+          images: string[] | null
           latitude?: number | null
           longitude?: number | null
           is_featured: boolean
@@ -52,8 +50,6 @@ export type Database = {
           display_location: string
           formatted_price?: string | null
           id: string
-          image: string
-          image_alt: string
           images?: string[] | null
           latitude?: number | null
           longitude?: number | null
@@ -80,8 +76,6 @@ export type Database = {
           display_location?: string
           formatted_price?: string | null
           id?: string
-          image?: string
-          image_alt?: string
           images?: string[] | null
           latitude?: number | null
           longitude?: number | null

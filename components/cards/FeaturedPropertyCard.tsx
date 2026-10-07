@@ -36,8 +36,8 @@ export const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
       {/* Image Container with 4:3 Aspect Ratio */}
       <div className="aspect-[4/3] w-full overflow-hidden relative">
         <img
-          alt={property.imageAlt}
-          src={property.image}
+          alt={property.title}
+          src={property.images[0]}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
 

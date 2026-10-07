@@ -28,8 +28,6 @@ export interface Property {
   listingType: 'buy' | 'rent';
   location: PropertyLocation;
   specs: PropertySpecs;
-  image: string;
-  imageAlt: string;
   images: string[];
   coordinates?: {
     lat: number;

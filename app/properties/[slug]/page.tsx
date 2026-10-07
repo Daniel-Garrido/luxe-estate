@@ -45,10 +45,10 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: property.image,
+          url: property.images[0],
           width: 1200,
           height: 800,
-          alt: property.imageAlt || property.title,
+          alt: property.title,
         },
       ],
       type: 'website',
@@ -57,7 +57,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [property.image],
+      images: [property.images[0]],
     },
   };
 }

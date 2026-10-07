@@ -36,12 +36,10 @@ export function mapRowToProperty(row: PropertyRow): Property {
       baths: Number(row.baths),
       sqm: Number(row.sqm),
     },
-    image: row.image,
-    imageAlt: row.image_alt,
     images:
       row.images && Array.isArray(row.images) && row.images.length > 0
         ? row.images
-        : [row.image],
+        : [],
     coordinates: {
       lat: Number(row.latitude) || 37.4419,
       lng: Number(row.longitude) || -122.1430,
