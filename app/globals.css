@@ -8,9 +8,11 @@
   --color-mosque: #006655;
   --color-hint-green: #D9ECC8;
   --color-clear-day: #EEF6F6;
-  --color-background-light: #EEF6F6;
-  --color-primary: #006655;
-  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-background-light: #f5f8f6;
+  --color-background-dark: #0f2312;
+  --color-primary: #006611;
+  --color-primary-light: #15803d;
+  --font-display: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
@@ -24,13 +26,56 @@
 body {
   background-color: #EEF6F6;
   color: #19322F;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 }
 
-.hide-scroll::-webkit-scrollbar {
+.hide-scroll::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-.hide-scroll {
+.hide-scroll,
+.no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Custom range slider styling for filters modal */
+.filter-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #006611;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px white, 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+  pointer-events: auto;
+  position: relative;
+  z-index: 20;
+}
+
+.filter-range-slider::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #006611;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px white, 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+  pointer-events: auto;
+}
+
+.filter-range-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.filter-range-slider::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
 }

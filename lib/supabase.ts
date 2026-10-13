@@ -75,6 +75,11 @@ export interface FetchPropertiesParams {
   category?: PropertyCategory | string;
   listingType?: ListingType | string;
   searchQuery?: string;
+  location?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minBeds?: number;
+  minBaths?: number;
 }
 
 export interface PaginatedPropertiesResult {
@@ -87,25 +92,24 @@ export interface PaginatedPropertiesResult {
   hasNext: boolean;
 }
 
-export async function getPaginatedProperties({
-  page = 1,
-  pageSize = 6,
-  category = 'All',
-  listingType = 'all',
-  searchQuery = '',
-}: FetchPropertiesParams = {}): Promise<PaginatedPropertiesResult> {
-  const currentPage = Math.max(1, Math.floor(page));
-  const safePageSize = Math.max(1, Math.min(50, Math.floor(pageSize)));
-  const from = (currentPage - 1) * safePageSize;
-  const to = from + safePageSize - 1;
+function buildPropertiesQuery(
+  params: FetchPropertiesParams = {},
+  options?: { count?: 'exact'; head?: boolean }
+) {
+  const {
+    category = 'All',
+    listingType = 'all',
+    searchQuery = '',
+    location = '',
+    minPrice,
+    maxPrice,
+    minBeds,
+    minBaths,
+  } = params;
 
-  let query = supabase
-    .from('properties')
-    .select('*', { count: 'exact' });
+  let query = supabase.from('properties').select('*', options);
 
-  // Exclude featured from general market list or include all? Usually all non-featured or all properties.
-  // In the design, featured has its own section, but let's allow all or filter by criteria:
-  if (category && category !== 'All') {
+  if (category && category !== 'All' && category !== 'Any Type') {
     query = query.ilike('category', category);
   }
 
@@ -113,17 +117,86 @@ export async function getPaginatedProperties({
     query = query.eq('listing_type', listingType as 'buy' | 'rent');
   }
 
-  if (searchQuery && searchQuery.trim().length > 0) {
-    const q = searchQuery.trim();
+  const effectiveTerm = (location || searchQuery || '').trim();
+  if (effectiveTerm.length > 0) {
     query = query.or(
-      `title.ilike.%${q}%,display_location.ilike.%${q}%,city.ilike.%${q}%,state.ilike.%${q}%`
+      `title.ilike.%${effectiveTerm}%,display_location.ilike.%${effectiveTerm}%,city.ilike.%${effectiveTerm}%,state.ilike.%${effectiveTerm}%,country.ilike.%${effectiveTerm}%,address.ilike.%${effectiveTerm}%`
     );
   }
 
-  // Sort by newest
-  query = query.order('created_at', { ascending: false });
+  if (minPrice !== undefined && minPrice > 0) {
+    query = query.gte('price', minPrice);
+  }
 
-  const { data, count, error } = await query.range(from, to);
+  if (maxPrice !== undefined && maxPrice > 0) {
+    query = query.lte('price', maxPrice);
+  }
+
+  if (minBeds !== undefined && minBeds > 0) {
+    query = query.gte('beds', minBeds);
+  }
+
+  if (minBaths !== undefined && minBaths > 0) {
+    query = query.gte('baths', minBaths);
+  }
+
+  return query;
+}
+
+export async function getPropertyFilterCount(
+  params: FetchPropertiesParams = {}
+): Promise<number> {
+  try {
+    const query = buildPropertiesQuery(params, {
+      count: 'exact',
+      head: true,
+    });
+    const { count, error } = await query;
+    if (error) {
+      console.error('Error counting filtered properties:', error.message);
+      return 0;
+    }
+    return count || 0;
+  } catch (err) {
+    console.error('Exception counting filtered properties:', err);
+    return 0;
+  }
+}
+
+export async function getPaginatedProperties({
+  page = 1,
+  pageSize = 6,
+  category = 'All',
+  listingType = 'all',
+  searchQuery = '',
+  location = '',
+  minPrice,
+  maxPrice,
+  minBeds,
+  minBaths,
+}: FetchPropertiesParams = {}): Promise<PaginatedPropertiesResult> {
+  const currentPage = Math.max(1, Math.floor(page));
+  const safePageSize = Math.max(1, Math.min(50, Math.floor(pageSize)));
+  const from = (currentPage - 1) * safePageSize;
+  const to = from + safePageSize - 1;
+
+  const query = buildPropertiesQuery(
+    {
+      category,
+      listingType,
+      searchQuery,
+      location,
+      minPrice,
+      maxPrice,
+      minBeds,
+      minBaths,
+    },
+    { count: 'exact' }
+  );
+
+  const { data, count, error } = await query
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error('Error fetching properties from Supabase:', error.message);
@@ -159,14 +232,14 @@ export async function getFeaturedPropertiesFromSupabase(): Promise<Property[]> {
     .select('*')
     .eq('is_featured', true)
     .order('created_at', { ascending: false })
-    .limit(4);
+    .limit(2);
 
   if (error) {
     console.error('Error fetching featured properties:', error.message);
     return [];
   }
 
-  return (data || []).map(mapRowToProperty);
+  return (data || []).map(mapRowToProperty).slice(0, 2);
 }
 
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {

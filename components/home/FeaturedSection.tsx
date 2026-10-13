@@ -17,7 +17,8 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({
   onFavoriteToggle,
   onViewAll,
 }) => {
-  if (properties.length === 0) return null;
+  const displayProperties = properties.slice(0, 2);
+  if (displayProperties.length === 0) return null;
 
   return (
     <section className="mb-16">
@@ -40,9 +41,9 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({
         </button>
       </div>
 
-      {/* Grid of 2 Featured Properties */}
+      {/* Grid of exactly 2 Featured Properties */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {properties.map((prop) => (
+        {displayProperties.map((prop) => (
           <FeaturedPropertyCard
             key={prop.id}
             property={prop}

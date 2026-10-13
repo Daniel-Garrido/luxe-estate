@@ -9,6 +9,11 @@ interface NewInMarketSectionProps {
   activeListingType: ListingType;
   category?: PropertyCategory;
   searchQuery?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  beds?: number;
+  baths?: number;
+  amenities?: string[];
   currentPage: number;
   totalPages: number;
   totalCount: number;
@@ -22,6 +27,11 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
   activeListingType,
   category = 'All',
   searchQuery = '',
+  minPrice,
+  maxPrice,
+  beds,
+  baths,
+  amenities,
   currentPage,
   totalPages,
   totalCount,
@@ -46,14 +56,40 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
     if (searchQuery && searchQuery.trim().length > 0) {
       params.set('q', searchQuery.trim());
     }
+    if (minPrice && minPrice > 0) {
+      params.set('minPrice', String(minPrice));
+    }
+    if (maxPrice && maxPrice < 20000000) {
+      params.set('maxPrice', String(maxPrice));
+    }
+    if (beds && beds > 0) {
+      params.set('beds', String(beds));
+    }
+    if (baths && baths > 0) {
+      params.set('baths', String(baths));
+    }
+    if (amenities && amenities.length > 0) {
+      params.set('amenities', amenities.join(','));
+    }
+
     const query = params.toString();
     return query ? `/?${query}#properties-grid` : '/#properties-grid';
   };
 
+  const hasAnyFilter = Boolean(
+    (category && category !== 'All') ||
+      (searchQuery && searchQuery.trim().length > 0) ||
+      (minPrice && minPrice > 0) ||
+      (maxPrice && maxPrice < 20000000) ||
+      (beds && beds > 0) ||
+      (baths && baths > 0) ||
+      (amenities && amenities.length > 0)
+  );
+
   return (
     <section id="properties-grid" className="scroll-mt-24">
       {/* Section Header with Segmented Filter Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-2xl font-light text-nordic-dark">
@@ -90,6 +126,56 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
         </div>
       </div>
 
+      {/* Active Filter Tags Bar */}
+      {hasAnyFilter && (
+        <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white/70 rounded-xl border border-nordic-dark/10 text-xs">
+          <span className="text-nordic-muted font-medium flex items-center gap-1 mr-1">
+            <span className="material-icons text-sm text-mosque">tune</span> Active Filters:
+          </span>
+
+          {searchQuery && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
+              Location: &ldquo;{searchQuery}&rdquo;
+            </span>
+          )}
+
+          {category && category !== 'All' && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
+              Type: {category}
+            </span>
+          )}
+
+          {(minPrice || maxPrice) && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
+              Price: {minPrice ? `$${(minPrice / 1000).toFixed(0)}k` : '$0'} –{' '}
+              {maxPrice && maxPrice < 20000000
+                ? `$${(maxPrice / 1000000).toFixed(1)}M`
+                : '$20M+'}
+            </span>
+          )}
+
+          {beds !== undefined && beds > 0 && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
+              {beds}+ Beds
+            </span>
+          )}
+
+          {baths !== undefined && baths > 0 && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
+              {baths}+ Baths
+            </span>
+          )}
+
+          <Link
+            href="/"
+            scroll={false}
+            className="inline-flex items-center gap-1 ml-auto text-mosque hover:underline font-medium hover:text-nordic-dark transition-colors"
+          >
+            Clear all filters
+          </Link>
+        </div>
+      )}
+
       {/* Property Cards Grid */}
       {properties.length === 0 ? (
         <div className="text-center py-20 bg-white/80 rounded-2xl border border-nordic-dark/5 shadow-xs">
@@ -100,8 +186,8 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
             No properties found
           </h3>
           <p className="text-nordic-muted text-sm mt-1 max-w-md mx-auto">
-            We couldn't find any properties matching your current filters. Try
-            clearing the search or selecting a different category.
+            We couldn&apos;t find any properties matching your current filters. Try
+            adjusting the filters or selecting a different category.
           </p>
           <div className="mt-6">
             <Link
@@ -136,6 +222,11 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
         category={category}
         listingType={activeListingType}
         searchQuery={searchQuery}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        beds={beds}
+        baths={baths}
+        amenities={amenities}
       />
     </section>
   );

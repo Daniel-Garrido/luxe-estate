@@ -9,6 +9,11 @@ interface PaginationProps {
   category?: string;
   listingType?: string;
   searchQuery?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  beds?: number;
+  baths?: number;
+  amenities?: string[];
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -19,6 +24,11 @@ export const Pagination: React.FC<PaginationProps> = ({
   category = 'All',
   listingType = 'all',
   searchQuery = '',
+  minPrice,
+  maxPrice,
+  beds,
+  baths,
+  amenities,
 }) => {
   if (totalPages <= 1 && totalCount <= pageSize) {
     return null;
@@ -37,6 +47,21 @@ export const Pagination: React.FC<PaginationProps> = ({
     }
     if (searchQuery && searchQuery.trim().length > 0) {
       params.set('q', searchQuery.trim());
+    }
+    if (minPrice && minPrice > 0) {
+      params.set('minPrice', String(minPrice));
+    }
+    if (maxPrice && maxPrice < 20000000) {
+      params.set('maxPrice', String(maxPrice));
+    }
+    if (beds && beds > 0) {
+      params.set('beds', String(beds));
+    }
+    if (baths && baths > 0) {
+      params.set('baths', String(baths));
+    }
+    if (amenities && amenities.length > 0) {
+      params.set('amenities', amenities.join(','));
     }
 
     const query = params.toString();

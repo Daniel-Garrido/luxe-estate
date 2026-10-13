@@ -25,6 +25,12 @@ interface HomePageProps {
     category?: string;
     type?: string;
     q?: string;
+    location?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    beds?: string;
+    baths?: string;
+    amenities?: string;
   }>;
 }
 
@@ -34,9 +40,56 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   const rawPage = parseInt(params.page || '1', 10);
   const page = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
-  const category = (params.category as PropertyCategory) || 'All';
-  const listingType = (params.type as ListingType) || 'all';
-  const searchQuery = (params.q || '').trim();
+
+  // Normalize category against valid options
+  const rawCategory = (params.category || 'All').trim();
+  const validCategories: PropertyCategory[] = [
+    'All',
+    'House',
+    'Apartment',
+    'Villa',
+    'Penthouse',
+  ];
+  const category: PropertyCategory =
+    validCategories.find(
+      (c) => c.toLowerCase() === rawCategory.toLowerCase()
+    ) || 'All';
+
+  const rawType = (params.type || 'all').trim().toLowerCase();
+  const listingType: ListingType =
+    rawType === 'buy' || rawType === 'rent' ? rawType : 'all';
+
+  const searchQuery = (params.q || params.location || '').trim();
+  const minPrice = params.minPrice ? parseInt(params.minPrice, 10) : undefined;
+  const maxPrice = params.maxPrice ? parseInt(params.maxPrice, 10) : undefined;
+  const beds = params.beds ? parseInt(params.beds, 10) : undefined;
+  const baths = params.baths ? parseFloat(params.baths) : undefined;
+  const amenities = params.amenities
+    ? params.amenities.split(',').filter(Boolean)
+    : undefined;
+
+  // Check if ANY filter or search has been applied
+  const hasCategoryFilter = category.toLowerCase() !== 'all';
+  const hasSearchFilter = searchQuery.length > 0;
+  const hasTypeFilter = listingType.toLowerCase() !== 'all';
+  const hasPriceFilter = Boolean(
+    (minPrice !== undefined && minPrice > 0) ||
+      (maxPrice !== undefined && maxPrice < 20000000)
+  );
+  const hasRoomFilter = Boolean(
+    (beds !== undefined && beds > 0) || (baths !== undefined && baths > 0)
+  );
+  const hasAmenityFilter = Boolean(amenities && amenities.length > 0);
+  const isPaginated = page > 1;
+
+  const isFilterOrSearchApplied =
+    hasCategoryFilter ||
+    hasSearchFilter ||
+    hasTypeFilter ||
+    hasPriceFilter ||
+    hasRoomFilter ||
+    hasAmenityFilter ||
+    isPaginated;
 
   // Fetch paginated properties directly on the server from Supabase
   const paginatedData = await getPaginatedProperties({
@@ -45,13 +98,16 @@ export default async function Home({ searchParams }: HomePageProps) {
     category,
     listingType,
     searchQuery,
+    minPrice,
+    maxPrice,
+    minBeds: beds,
+    minBaths: baths,
   });
 
-  // Fetch featured properties directly on the server from Supabase
-  const featuredProperties = await getFeaturedPropertiesFromSupabase();
-
-  const isDefaultHomeView =
-    category === 'All' && listingType === 'all' && !searchQuery && page === 1;
+  // Fetch featured properties directly on the server from Supabase (strictly max 2)
+  const featuredProperties = isFilterOrSearchApplied
+    ? []
+    : (await getFeaturedPropertiesFromSupabase()).slice(0, 2);
 
   return (
     <div className="min-h-screen bg-clear-day text-nordic-dark font-display antialiased selection:bg-mosque selection:text-white">
@@ -65,10 +121,15 @@ export default async function Home({ searchParams }: HomePageProps) {
           initialSearchQuery={searchQuery}
           selectedCategory={category}
           activeListingType={listingType}
+          initialMinPrice={minPrice}
+          initialMaxPrice={maxPrice}
+          initialBeds={beds}
+          initialBaths={baths}
+          initialAmenities={amenities}
         />
 
-        {/* Featured Collections Section (Curated highlight on landing page) */}
-        {isDefaultHomeView && featuredProperties.length > 0 && (
+        {/* Featured Collections Section: ONLY shown on clean default view (no search or filter active), exactly 2 items */}
+        {!isFilterOrSearchApplied && featuredProperties.length > 0 && (
           <FeaturedSection properties={featuredProperties} />
         )}
 
@@ -78,6 +139,11 @@ export default async function Home({ searchParams }: HomePageProps) {
           activeListingType={listingType}
           category={category}
           searchQuery={searchQuery}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          beds={beds}
+          baths={baths}
+          amenities={amenities}
           currentPage={paginatedData.page}
           totalPages={paginatedData.totalPages}
           totalCount={paginatedData.totalCount}
