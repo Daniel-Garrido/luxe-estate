@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Property } from '@/types/property';
+import { useI18n } from '@/i18n/I18nProvider';
+import { format } from '@/i18n/format';
 
 interface FeaturedPropertyCardProps {
   property: Property;
@@ -15,6 +17,7 @@ export const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
   onSelect,
   onFavoriteToggle,
 }) => {
+  const { dict } = useI18n();
   const [isSaved, setIsSaved] = useState(property.isSaved || false);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -52,7 +55,7 @@ export const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
         <button
           type="button"
           onClick={handleFavoriteClick}
-          aria-label={isSaved ? 'Remove from saved' : 'Save property'}
+          aria-label={isSaved ? dict.card.removeSaved : dict.card.save}
           className={`absolute top-4 right-4 w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center transition-all cursor-pointer ${
             isSaved
               ? 'bg-mosque text-white'
@@ -94,11 +97,11 @@ export const FeaturedPropertyCard: React.FC<FeaturedPropertyCardProps> = ({
         <div className="flex items-center gap-6 mt-6 pt-6 border-t border-nordic-dark/5">
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
             <span className="material-icons text-lg">king_bed</span>{' '}
-            {property.specs.beds} Beds
+            {format(dict.card.beds, { count: property.specs.beds })}
           </div>
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
             <span className="material-icons text-lg">bathtub</span>{' '}
-            {property.specs.baths} Baths
+            {format(dict.card.baths, { count: property.specs.baths })}
           </div>
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
             <span className="material-icons text-lg">square_foot</span>{' '}

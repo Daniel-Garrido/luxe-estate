@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useI18n } from '@/i18n/I18nProvider';
+import { format } from '@/i18n/format';
 
 interface PropertyGalleryProps {
   images: string[];
@@ -17,6 +19,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
   badgeType,
   isFeatured,
 }) => {
+  const t = useI18n().dict.property.gallery;
   const galleryImages = images && images.length > 0 ? images : ['/images/placeholder.jpg'];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -39,7 +42,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
         {/* Main Hero Image */}
         <div className="relative aspect-[16/10] overflow-hidden rounded-xl shadow-sm group bg-gray-100">
           <img
-            alt={`${title} - Photo ${selectedIndex + 1}`}
+            alt={format(t.photoAlt, { title, number: selectedIndex + 1 })}
             src={activeImage}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
@@ -48,7 +51,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
           <div className="absolute top-4 left-4 flex gap-2 z-10">
             {isFeatured && (
               <span className="bg-mosque text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-                Featured
+                {t.featured}
               </span>
             )}
             {badge && (
@@ -58,7 +61,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
             )}
             {!isFeatured && !badge && (
               <span className="bg-mosque text-white text-xs font-medium px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
-                Premium
+                {t.premium}
               </span>
             )}
           </div>
@@ -69,7 +72,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
               <button
                 type="button"
                 onClick={handlePrev}
-                aria-label="Previous photo"
+                aria-label={t.prevPhoto}
                 className="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-nordic shadow-md flex items-center justify-center pointer-events-auto transition-transform hover:scale-110 cursor-pointer"
               >
                 <span className="material-icons text-xl">chevron_left</span>
@@ -77,7 +80,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                aria-label="Next photo"
+                aria-label={t.nextPhoto}
                 className="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-nordic shadow-md flex items-center justify-center pointer-events-auto transition-transform hover:scale-110 cursor-pointer"
               >
                 <span className="material-icons text-xl">chevron_right</span>
@@ -92,7 +95,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
             className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-nordic px-4 py-2 rounded-lg text-sm font-medium shadow-lg backdrop-blur-sm transition-all flex items-center gap-2 cursor-pointer z-10 hover:shadow-xl"
           >
             <span className="material-icons text-sm">grid_view</span>
-            View All Photos ({galleryImages.length})
+            {format(t.viewAllPhotos, { count: galleryImages.length })}
           </button>
         </div>
 
@@ -113,7 +116,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
                   }`}
                 >
                   <img
-                    alt={`Thumbnail ${idx + 1}`}
+                    alt={format(t.thumbnailAlt, { number: idx + 1 })}
                     src={img}
                     className="w-full h-full object-cover"
                     loading="lazy"
@@ -137,14 +140,14 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
             <div>
               <h3 className="font-medium text-lg text-white">{title}</h3>
               <p className="text-white/60 text-sm">
-                Photo {selectedIndex + 1} of {galleryImages.length}
+                {format(t.photoOf, { current: selectedIndex + 1, total: galleryImages.length })}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsLightboxOpen(false)}
               className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
-              aria-label="Close photo gallery"
+              aria-label={t.closeGallery}
             >
               <span className="material-icons">close</span>
             </button>
@@ -153,7 +156,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
           {/* Main Photo Area */}
           <div className="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
             <img
-              alt={`${title} - Photo ${selectedIndex + 1}`}
+              alt={format(t.photoAlt, { title, number: selectedIndex + 1 })}
               src={activeImage}
               className="max-h-[75vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300"
             />
@@ -165,7 +168,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
                   type="button"
                   onClick={handlePrev}
                   className="absolute left-2 sm:left-6 w-12 h-12 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center backdrop-blur-sm transition-all cursor-pointer hover:scale-105"
-                  aria-label="Previous image"
+                  aria-label={t.prevPhoto}
                 >
                   <span className="material-icons text-2xl">chevron_left</span>
                 </button>
@@ -173,7 +176,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
                   type="button"
                   onClick={handleNext}
                   className="absolute right-2 sm:right-6 w-12 h-12 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center backdrop-blur-sm transition-all cursor-pointer hover:scale-105"
-                  aria-label="Next image"
+                  aria-label={t.nextPhoto}
                 >
                   <span className="material-icons text-2xl">chevron_right</span>
                 </button>
@@ -195,7 +198,7 @@ export const PropertyGallery: React.FC<PropertyGalleryProps> = ({
                 }`}
               >
                 <img
-                  alt={`Thumbnail ${idx + 1}`}
+                  alt={format(t.thumbnailAlt, { number: idx + 1 })}
                   src={img}
                   className="w-full h-full object-cover"
                 />

@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Property, ListingType, PropertyCategory } from '@/types/property';
 import { PropertyCard } from '@/components/cards/PropertyCard';
 import { Pagination } from '@/components/home/Pagination';
+import { getDictionary } from '@/i18n/dictionaries';
+import { format, plural } from '@/i18n/format';
 
 interface NewInMarketSectionProps {
   properties: Property[];
@@ -22,7 +24,7 @@ interface NewInMarketSectionProps {
   onFavoriteToggle?: (id: string, isFav: boolean) => void;
 }
 
-export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
+export const NewInMarketSection = async ({
   properties,
   activeListingType,
   category = 'All',
@@ -38,11 +40,14 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
   pageSize,
   onPropertySelect,
   onFavoriteToggle,
-}) => {
+}: NewInMarketSectionProps) => {
+  const dict = await getDictionary();
+  const t = dict.market;
+
   const tabs: { label: string; value: ListingType }[] = [
-    { label: 'All', value: 'all' },
-    { label: 'Buy', value: 'buy' },
-    { label: 'Rent', value: 'rent' },
+    { label: t.tabAll, value: 'all' },
+    { label: t.tabBuy, value: 'buy' },
+    { label: t.tabRent, value: 'rent' },
   ];
 
   const buildTabUrl = (type: ListingType) => {
@@ -93,14 +98,14 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-2xl font-light text-nordic-dark">
-              Available Properties
+              {t.title}
             </h2>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-mosque/10 text-mosque">
-              {totalCount} {totalCount === 1 ? 'residence' : 'residences'}
+              {plural(totalCount, t.residences)}
             </span>
           </div>
           <p className="text-nordic-muted mt-1 text-sm">
-            Live catalog synchronized directly with Supabase database.
+            {t.subtitle}
           </p>
         </div>
 
@@ -130,39 +135,42 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
       {hasAnyFilter && (
         <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white/70 rounded-xl border border-nordic-dark/10 text-xs">
           <span className="text-nordic-muted font-medium flex items-center gap-1 mr-1">
-            <span className="material-icons text-sm text-mosque">tune</span> Active Filters:
+            <span className="material-icons text-sm text-mosque">tune</span> {t.activeFilters}
           </span>
 
           {searchQuery && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
-              Location: &ldquo;{searchQuery}&rdquo;
+              {format(t.locationFilter, { value: searchQuery })}
             </span>
           )}
 
           {category && category !== 'All' && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
-              Type: {category}
+              {format(t.typeFilter, { value: dict.categories[category] })}
             </span>
           )}
 
           {(minPrice || maxPrice) && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
-              Price: {minPrice ? `$${(minPrice / 1000).toFixed(0)}k` : '$0'} –{' '}
-              {maxPrice && maxPrice < 20000000
-                ? `$${(maxPrice / 1000000).toFixed(1)}M`
-                : '$20M+'}
+              {format(t.priceFilter, {
+                min: minPrice ? `$${(minPrice / 1000).toFixed(0)}k` : '$0',
+                max:
+                  maxPrice && maxPrice < 20000000
+                    ? `$${(maxPrice / 1000000).toFixed(1)}M`
+                    : '$20M+',
+              })}
             </span>
           )}
 
           {beds !== undefined && beds > 0 && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
-              {beds}+ Beds
+              {format(t.bedsFilter, { count: beds })}
             </span>
           )}
 
           {baths !== undefined && baths > 0 && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-hint-green/40 text-nordic-dark font-medium">
-              {baths}+ Baths
+              {format(t.bathsFilter, { count: baths })}
             </span>
           )}
 
@@ -171,7 +179,7 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
             scroll={false}
             className="inline-flex items-center gap-1 ml-auto text-mosque hover:underline font-medium hover:text-nordic-dark transition-colors"
           >
-            Clear all filters
+            {t.clearAll}
           </Link>
         </div>
       )}
@@ -183,11 +191,10 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
             <span className="material-icons text-3xl">domain_disabled</span>
           </div>
           <h3 className="text-lg font-medium text-nordic-dark">
-            No properties found
+            {t.emptyTitle}
           </h3>
           <p className="text-nordic-muted text-sm mt-1 max-w-md mx-auto">
-            We couldn&apos;t find any properties matching your current filters. Try
-            adjusting the filters or selecting a different category.
+            {t.emptyDescription}
           </p>
           <div className="mt-6">
             <Link
@@ -196,7 +203,7 @@ export const NewInMarketSection: React.FC<NewInMarketSectionProps> = ({
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-nordic-dark text-white text-sm font-medium rounded-lg hover:bg-mosque transition-colors"
             >
               <span className="material-icons text-sm">refresh</span>
-              Reset all filters
+              {t.resetAll}
             </Link>
           </div>
         </div>

@@ -45,14 +45,8 @@ export function mapRowToProperty(row: PropertyRow): Property {
       lng: Number(row.longitude) || -122.1430,
     },
     garage: 2,
-    amenities: [
-      'Smart Home System',
-      'Swimming Pool',
-      'Central Heating & Cooling',
-      'Electric Vehicle Charging',
-      'Private Gym',
-      'Wine Cellar',
-    ],
+    // Translation keys from `property.features.amenityList` in i18n/locales/*.json
+    amenities: ['smartHome', 'pool', 'climate', 'evCharging', 'gym', 'wineCellar'],
     agent: {
       name: 'Sarah Jenkins',
       title: 'Top Rated Agent',

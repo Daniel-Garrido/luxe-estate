@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface PropertyMapProps {
   latitude: number;
@@ -18,6 +19,7 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
   address,
   displayLocation,
 }) => {
+  const { dict } = useI18n();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
 
@@ -98,7 +100,7 @@ export const PropertyMap: React.FC<PropertyMapProps> = ({
           rel="noopener noreferrer"
           className="flex items-center gap-1"
         >
-          <span>Open in Maps</span>
+          <span>{dict.property.map.openInMaps}</span>
           <span className="material-icons text-[12px]">open_in_new</span>
         </a>
       </div>

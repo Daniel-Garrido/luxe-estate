@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Property } from '@/types/property';
+import { useI18n } from '@/i18n/I18nProvider';
+import { format, formatRich } from '@/i18n/format';
 
 interface ScheduleVisitModalProps {
   property: Property;
@@ -16,6 +18,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   onClose,
   defaultMode = 'visit',
 }) => {
+  const t = useI18n().dict.property.visit;
   const [mode, setMode] = useState<'visit' | 'contact'>(defaultMode);
   const [formData, setFormData] = useState({
     name: '',
@@ -39,7 +42,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hola, me interesa agendar una visita para la propiedad: ${property.title} (Ref: ${property.id}). ¿Podrían brindarme más información?`
+    format(t.whatsappMessage, { title: property.title, id: property.id })
   );
 
   return (
@@ -53,7 +56,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close dialog"
+          aria-label={t.close}
           className="absolute top-5 right-5 text-nordic-dark/50 hover:text-nordic-dark transition-colors p-1 rounded-full hover:bg-slate-100 cursor-pointer"
         >
           <span className="material-icons text-xl">close</span>
@@ -64,9 +67,9 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
             <div className="w-16 h-16 bg-hint-green rounded-full flex items-center justify-center mx-auto text-mosque">
               <span className="material-icons text-3xl">check_circle</span>
             </div>
-            <h3 className="text-2xl font-light text-nordic-dark">Request Received</h3>
+            <h3 className="text-2xl font-light text-nordic-dark">{t.receivedTitle}</h3>
             <p className="text-nordic-muted text-sm max-w-sm mx-auto">
-              Our private client broker for <strong>{property.title}</strong> will contact you shortly to confirm your appointment.
+              {formatRich(t.receivedText, { title: <strong>{property.title}</strong> })}
             </p>
           </div>
         ) : (
@@ -83,7 +86,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                       : 'bg-slate-100 text-nordic-muted hover:text-nordic-dark'
                   }`}
                 >
-                  Schedule Private Visit
+                  {t.tabVisit}
                 </button>
                 <button
                   type="button"
@@ -94,11 +97,11 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                       : 'bg-slate-100 text-nordic-muted hover:text-nordic-dark'
                   }`}
                 >
-                  Contact Broker
+                  {t.tabContact}
                 </button>
               </div>
               <h2 className="text-2xl font-light text-nordic-dark">
-                {mode === 'visit' ? 'Book a Private Showing' : 'Inquire About Property'}
+                {mode === 'visit' ? t.titleVisit : t.titleContact}
               </h2>
               <p className="text-xs text-nordic-muted mt-1">
                 {property.title} — {property.formattedPrice}
@@ -109,12 +112,12 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-nordic-dark mb-1">
-                  Full Name
+                  {t.fullName}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Alexander Vance"
+                  placeholder={t.namePlaceholder}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3.5 py-2.5 rounded-lg border border-nordic-dark/15 text-sm focus:outline-hidden focus:border-mosque focus:ring-1 focus:ring-mosque"
@@ -124,7 +127,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-nordic-dark mb-1">
-                    Email Address
+                    {t.email}
                   </label>
                   <input
                     type="email"
@@ -137,7 +140,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-nordic-dark mb-1">
-                    Phone Number
+                    {t.phone}
                   </label>
                   <input
                     type="tel"
@@ -154,7 +157,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-nordic-dark mb-1">
-                      Preferred Date
+                      {t.date}
                     </label>
                     <input
                       type="date"
@@ -166,16 +169,16 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-nordic-dark mb-1">
-                      Time of Day
+                      {t.time}
                     </label>
                     <select
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-lg border border-nordic-dark/15 text-sm focus:outline-hidden focus:border-mosque focus:ring-1 focus:ring-mosque bg-white"
                     >
-                      <option value="morning">Morning (9am - 12pm)</option>
-                      <option value="afternoon">Afternoon (1pm - 5pm)</option>
-                      <option value="evening">Sunset Tour (5pm - 7pm)</option>
+                      <option value="morning">{t.morning}</option>
+                      <option value="afternoon">{t.afternoon}</option>
+                      <option value="evening">{t.evening}</option>
                     </select>
                   </div>
                 </div>
@@ -183,11 +186,11 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
 
               <div>
                 <label className="block text-xs font-medium text-nordic-dark mb-1">
-                  Message or Special Requests (Optional)
+                  {t.message}
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="I'm interested in viewing this property..."
+                  placeholder={t.messagePlaceholder}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full px-3.5 py-2.5 rounded-lg border border-nordic-dark/15 text-sm focus:outline-hidden focus:border-mosque focus:ring-1 focus:ring-mosque"
@@ -201,7 +204,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 <span className="material-icons text-lg">
                   {mode === 'visit' ? 'calendar_today' : 'send'}
                 </span>
-                {mode === 'visit' ? 'Request Appointment' : 'Send Message'}
+                {mode === 'visit' ? t.requestAppointment : t.sendMessage}
               </button>
 
               {/* Direct WhatsApp Option */}
@@ -213,7 +216,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                   className="inline-flex items-center gap-2 text-xs font-medium text-mosque hover:opacity-80 transition-opacity"
                 >
                   <span className="material-icons text-sm">chat</span>
-                  Or chat directly via WhatsApp
+                  {t.whatsapp}
                 </a>
               </div>
             </form>

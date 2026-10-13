@@ -7,6 +7,8 @@ import {
   SearchFiltersModal,
   FilterValues,
 } from '@/components/home/SearchFiltersModal';
+import { useI18n } from '@/i18n/I18nProvider';
+import { formatRich } from '@/i18n/format';
 
 interface HeroSearchProps {
   initialSearchQuery?: string;
@@ -42,6 +44,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
   onToggleFilters,
 }) => {
   const router = useRouter();
+  const { dict } = useI18n();
   const [isPending, startTransition] = useTransition();
   const [query, setQuery] = useState(initialSearchQuery || initialLocation || '');
   const [optimisticCategory, setOptimisticCategory] = useState<PropertyCategory>(selectedCategory);
@@ -202,16 +205,18 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
       <div className="max-w-3xl mx-auto text-center space-y-7">
         {/* Main Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-nordic-dark leading-tight">
-          Find your{' '}
-          <span className="relative inline-block">
-            <span className="relative z-10 font-medium">sanctuary</span>
-            <span className="absolute bottom-2 left-0 w-full h-3 bg-hint-green -rotate-1 z-0"></span>
-          </span>
-          .
+          {formatRich(dict.hero.title, {
+            highlight: (
+              <span className="relative inline-block">
+                <span className="relative z-10 font-medium">{dict.hero.titleHighlight}</span>
+                <span className="absolute bottom-2 left-0 w-full h-3 bg-hint-green -rotate-1 z-0"></span>
+              </span>
+            ),
+          })}
         </h1>
 
         <p className="text-nordic-muted text-base md:text-lg max-w-xl mx-auto font-light">
-          Explore architectural luxury homes and waterfront villas powered by Supabase.
+          {dict.hero.subtitle}
         </p>
 
         {/* Search Input Bar */}
@@ -220,7 +225,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           className="relative group max-w-2xl mx-auto"
         >
           <label htmlFor={searchInputId} className="sr-only">
-            Search properties by city, neighborhood, or address
+            {dict.hero.searchLabel}
           </label>
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span
@@ -238,7 +243,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by city, neighborhood, or address..."
+            placeholder={dict.hero.searchPlaceholder}
             className="block w-full pl-12 pr-28 py-4 rounded-xl border-none bg-white text-nordic-dark shadow-soft placeholder-nordic-muted/60 focus:outline-none focus:ring-2 focus:ring-mosque focus:bg-white transition-all text-base md:text-lg"
           />
 
@@ -259,7 +264,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                   router.push(url);
                 });
               }}
-              aria-label="Clear search"
+              aria-label={dict.hero.clearSearch}
               className="absolute inset-y-0 right-28 flex items-center pr-2 text-nordic-muted hover:text-nordic-dark cursor-pointer"
             >
               <span className="material-icons text-lg">close</span>
@@ -271,7 +276,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             disabled={isPending}
             className="absolute inset-y-2 right-2 px-6 bg-mosque hover:bg-mosque/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-mosque/20 cursor-pointer disabled:opacity-75"
           >
-            {isPending ? 'Searching...' : 'Search'}
+            {isPending ? dict.hero.searching : dict.hero.search}
           </button>
         </form>
 
@@ -292,7 +297,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                     : 'bg-white border border-nordic-dark/10 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 hover:bg-mosque/5'
                 }`}
               >
-                {cat}
+                {dict.categories[cat]}
               </button>
             );
           })}
@@ -310,7 +315,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             }`}
           >
             <span className="material-icons text-base">tune</span>
-            Filters
+            {dict.hero.filters}
             {hasActiveCustomFilters && (
               <span className="w-2 h-2 rounded-full bg-hint-green"></span>
             )}

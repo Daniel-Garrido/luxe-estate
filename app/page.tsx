@@ -9,12 +9,15 @@ import {
   getFeaturedPropertiesFromSupabase,
 } from '@/lib/supabase';
 import { PropertyCategory, ListingType } from '@/types/property';
+import { getDictionary } from '@/i18n/dictionaries';
 
-export const metadata: Metadata = {
-  title: 'LuxeEstate | Architectural Luxury Homes & Waterfront Sanctuaries',
-  description:
-    'Discover exceptional luxury properties, architectural villas, and skyline penthouses curated for the discerning buyer. Real-time listings connected with Supabase.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return {
+    title: dict.meta.homeTitle,
+    description: dict.meta.homeDescription,
+  };
+}
 
 // Force dynamic server rendering so server-side pagination with searchParams works on every request
 export const dynamic = 'force-dynamic';

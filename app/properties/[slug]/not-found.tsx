@@ -1,8 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
+import { getDictionary } from '@/i18n/dictionaries';
 
-export default function PropertyNotFound() {
+export default async function PropertyNotFound() {
+  const t = (await getDictionary()).property.notFound;
+
   return (
     <div className="min-h-screen bg-clear-day text-nordic-dark font-display antialiased flex flex-col">
       <Navbar />
@@ -13,11 +16,11 @@ export default function PropertyNotFound() {
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-light text-nordic-dark mb-3">
-          Property Not Found
+          {t.title}
         </h1>
 
         <p className="text-nordic-muted max-w-md text-sm sm:text-base mb-8">
-          The luxury property you are looking for may have been sold, leased, or is no longer publicly listed.
+          {t.description}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
@@ -26,13 +29,13 @@ export default function PropertyNotFound() {
             className="px-6 py-3 bg-mosque hover:bg-primary-hover text-white rounded-lg text-sm font-medium transition-colors shadow-md shadow-mosque/20 flex items-center gap-2 cursor-pointer"
           >
             <span className="material-icons text-lg">arrow_back</span>
-            Return to All Homes
+            {t.returnHome}
           </Link>
           <Link
             href="/?type=buy"
             className="px-6 py-3 bg-white border border-slate-200 hover:border-mosque text-nordic-dark hover:text-mosque rounded-lg text-sm font-medium transition-colors cursor-pointer"
           >
-            Explore Available Listings
+            {t.explore}
           </Link>
         </div>
       </main>

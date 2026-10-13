@@ -4,17 +4,23 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Property } from '@/types/property';
 import { ScheduleVisitModal } from '@/components/property/ScheduleVisitModal';
+import { useI18n } from '@/i18n/I18nProvider';
+
+const MapLoading = () => {
+  const { dict } = useI18n();
+  return (
+    <div className="w-full aspect-[4/3] rounded-lg bg-slate-100 animate-pulse flex items-center justify-center text-nordic-muted text-xs">
+      <span className="material-icons animate-spin mr-2">refresh</span> {dict.property.sidebar.loadingMap}
+    </div>
+  );
+};
 
 // Dynamic import with SSR disabled for Leaflet (requires browser DOM / window)
 const PropertyMap = dynamic(
   () => import('@/components/property/PropertyMap').then((mod) => mod.PropertyMap),
   {
     ssr: false,
-    loading: () => (
-      <div className="w-full aspect-[4/3] rounded-lg bg-slate-100 animate-pulse flex items-center justify-center text-nordic-muted text-xs">
-        <span className="material-icons animate-spin mr-2">refresh</span> Loading Map...
-      </div>
-    ),
+    loading: () => <MapLoading />,
   }
 );
 
@@ -23,6 +29,8 @@ interface PropertySidebarProps {
 }
 
 export const PropertySidebar: React.FC<PropertySidebarProps> = ({ property }) => {
+  const { dict } = useI18n();
+  const t = dict.property.sidebar;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'visit' | 'contact'>('visit');
 
@@ -84,7 +92,7 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({ property }) =>
               </h3>
               <div className="flex items-center gap-1 text-xs text-mosque font-medium">
                 <span className="material-icons text-[14px]">star</span>
-                <span>{agent.title || 'Top Rated Agent'}</span>
+                <span>{t.topRatedAgent}</span>
               </div>
             </div>
 
@@ -93,14 +101,14 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({ property }) =>
               <button
                 type="button"
                 onClick={openContactAgent}
-                aria-label="Chat with agent"
+                aria-label={t.chatAgent}
                 className="p-2 rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-colors cursor-pointer"
               >
                 <span className="material-icons text-sm">chat</span>
               </button>
               <a
                 href={`tel:${agent.phone || '+15552345678'}`}
-                aria-label="Call agent"
+                aria-label={t.callAgent}
                 className="p-2 rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-colors cursor-pointer"
               >
                 <span className="material-icons text-sm">call</span>
@@ -118,7 +126,7 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({ property }) =>
               <span className="material-icons text-xl group-hover:scale-110 transition-transform">
                 calendar_today
               </span>
-              Schedule Visit
+              {t.scheduleVisit}
             </button>
             <button
               type="button"
@@ -126,7 +134,7 @@ export const PropertySidebar: React.FC<PropertySidebarProps> = ({ property }) =>
               className="w-full bg-transparent border border-nordic/10 hover:border-mosque text-nordic/80 hover:text-mosque py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="material-icons text-xl">mail_outline</span>
-              Contact Agent
+              {t.contactAgent}
             </button>
           </div>
         </div>

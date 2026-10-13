@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useId, useCallback } from 'react';
 import { getPropertyFilterCount } from '@/lib/supabase';
 import { PropertyCategory, ListingType } from '@/types/property';
+import { useI18n } from '@/i18n/I18nProvider';
+import { plural } from '@/i18n/format';
 
 export interface FilterValues {
   location: string;
@@ -27,13 +29,13 @@ const DEFAULT_MAX_PRICE = 20000000;
 const PRICE_STEP = 100000;
 
 const AMENITY_OPTIONS = [
-  { id: 'pool', label: 'Swimming Pool', icon: 'pool' },
-  { id: 'gym', label: 'Gym', icon: 'fitness_center' },
-  { id: 'parking', label: 'Parking', icon: 'local_parking' },
-  { id: 'ac', label: 'Air Conditioning', icon: 'ac_unit' },
-  { id: 'wifi', label: 'High-speed Wifi', icon: 'wifi' },
-  { id: 'patio', label: 'Patio / Terrace', icon: 'deck' },
-];
+  { id: 'pool', icon: 'pool' },
+  { id: 'gym', icon: 'fitness_center' },
+  { id: 'parking', icon: 'local_parking' },
+  { id: 'ac', icon: 'ac_unit' },
+  { id: 'wifi', icon: 'wifi' },
+  { id: 'patio', icon: 'deck' },
+] as const;
 
 function formatPriceDisplay(amount: number): string {
   if (amount >= 1000000) {
@@ -54,6 +56,8 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
   activeListingType = 'all',
   onApplyFilters,
 }) => {
+  const { dict } = useI18n();
+  const t = dict.filters;
   const [location, setLocation] = useState(initialFilters?.location || '');
   const [minPrice, setMinPrice] = useState(
     initialFilters?.minPrice !== undefined ? initialFilters.minPrice : DEFAULT_MIN_PRICE
@@ -193,7 +197,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
 
   const priceRangeSummary =
     minPrice === DEFAULT_MIN_PRICE && maxPrice === DEFAULT_MAX_PRICE
-      ? 'Any Price'
+      ? t.anyPrice
       : `${formatPriceDisplay(minPrice)} – ${formatPriceDisplay(maxPrice)}`;
 
   return (
@@ -221,13 +225,13 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
         {/* Header */}
         <header className="px-8 py-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-white dark:bg-gray-900 sticky top-0 z-30">
           <h2 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            Filters
+            {t.title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400 cursor-pointer"
-            aria-label="Close modal"
+            aria-label={t.close}
           >
             <span className="material-icons">close</span>
           </button>
@@ -238,7 +242,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
           {/* Section 1: Location */}
           <section>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-              Location
+              {t.location}
             </label>
             <div className="relative group">
               <span className="material-icons absolute left-4 top-3.5 text-gray-400 group-focus-within:text-primary transition-colors">
@@ -248,7 +252,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="City, neighborhood, or address"
+                placeholder={t.locationPlaceholder}
                 className="w-full pl-12 pr-4 py-3 bg-background-light dark:bg-gray-800 border-0 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-gray-800 transition-all shadow-xs"
               />
             </div>
@@ -258,7 +262,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
           <section>
             <div className="flex justify-between items-end mb-4">
               <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Price Range
+                {t.priceRange}
               </label>
               <span className="text-sm font-medium text-primary">
                 {priceRangeSummary}
@@ -286,7 +290,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
                 step={PRICE_STEP}
                 value={minPrice}
                 onChange={handleMinSliderChange}
-                aria-label="Minimum price"
+                aria-label={t.minPriceAria}
                 className="filter-range-slider absolute left-2 right-2 w-[calc(100%-16px)] h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer"
               />
 
@@ -298,7 +302,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
                 step={PRICE_STEP}
                 value={maxPrice}
                 onChange={handleMaxSliderChange}
-                aria-label="Maximum price"
+                aria-label={t.maxPriceAria}
                 className="filter-range-slider absolute left-2 right-2 w-[calc(100%-16px)] h-1 bg-transparent appearance-none pointer-events-none z-20 cursor-pointer"
               />
             </div>
@@ -307,7 +311,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-background-light dark:bg-gray-800 p-3 rounded-lg border border-transparent focus-within:border-primary/30 transition-colors">
                 <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">
-                  Min Price
+                  {t.minPrice}
                 </label>
                 <div className="flex items-center">
                   <span className="text-gray-400 mr-1">$</span>
@@ -322,7 +326,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
 
               <div className="bg-background-light dark:bg-gray-800 p-3 rounded-lg border border-transparent focus-within:border-primary/30 transition-colors">
                 <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">
-                  Max Price
+                  {t.maxPrice}
                 </label>
                 <div className="flex items-center">
                   <span className="text-gray-400 mr-1">$</span>
@@ -342,7 +346,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
             {/* Property Type Dropdown */}
             <div className="space-y-3">
               <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Property Type
+                {t.propertyType}
               </label>
               <div className="relative">
                 <select
@@ -350,11 +354,11 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
                   onChange={(e) => setPropertyType(e.target.value)}
                   className="w-full bg-background-light dark:bg-gray-800 border-0 rounded-lg py-3 pl-4 pr-10 text-gray-900 dark:text-white appearance-none focus:ring-2 focus:ring-primary cursor-pointer"
                 >
-                  <option value="Any Type">Any Type</option>
-                  <option value="House">House</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="Villa">Villa</option>
-                  <option value="Penthouse">Penthouse</option>
+                  <option value="Any Type">{t.anyType}</option>
+                  <option value="House">{dict.categories.House}</option>
+                  <option value="Apartment">{dict.categories.Apartment}</option>
+                  <option value="Villa">{dict.categories.Villa}</option>
+                  <option value="Penthouse">{dict.categories.Penthouse}</option>
                 </select>
                 <span className="material-icons absolute right-3 top-3 text-gray-400 pointer-events-none">
                   expand_more
@@ -367,25 +371,25 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
               {/* Bedrooms */}
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  Bedrooms
+                  {t.bedrooms}
                 </span>
                 <div className="flex items-center space-x-3 bg-background-light dark:bg-gray-800 rounded-full p-1">
                   <button
                     type="button"
                     onClick={() => setBeds((b) => Math.max(0, b - 1))}
                     disabled={beds === 0}
-                    aria-label="Decrease bedrooms"
+                    aria-label={t.decreaseBedrooms}
                     className="w-8 h-8 rounded-full bg-white dark:bg-gray-700 shadow-xs flex items-center justify-center text-gray-500 hover:text-primary disabled:opacity-50 transition-colors cursor-pointer disabled:cursor-not-allowed"
                   >
                     <span className="material-icons text-base">remove</span>
                   </button>
                   <span className="text-sm font-semibold w-8 text-center text-gray-900 dark:text-white">
-                    {beds === 0 ? 'Any' : `${beds}+`}
+                    {beds === 0 ? t.any : `${beds}+`}
                   </span>
                   <button
                     type="button"
                     onClick={() => setBeds((b) => Math.min(10, b + 1))}
-                    aria-label="Increase bedrooms"
+                    aria-label={t.increaseBedrooms}
                     className="w-8 h-8 rounded-full bg-white dark:bg-gray-700 shadow-xs flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer"
                   >
                     <span className="material-icons text-base">add</span>
@@ -396,25 +400,25 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
               {/* Bathrooms */}
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  Bathrooms
+                  {t.bathrooms}
                 </span>
                 <div className="flex items-center space-x-3 bg-background-light dark:bg-gray-800 rounded-full p-1">
                   <button
                     type="button"
                     onClick={() => setBaths((b) => Math.max(0, b - 1))}
                     disabled={baths === 0}
-                    aria-label="Decrease bathrooms"
+                    aria-label={t.decreaseBathrooms}
                     className="w-8 h-8 rounded-full bg-white dark:bg-gray-700 shadow-xs flex items-center justify-center text-gray-500 hover:text-primary disabled:opacity-50 transition-colors cursor-pointer disabled:cursor-not-allowed"
                   >
                     <span className="material-icons text-base">remove</span>
                   </button>
                   <span className="text-sm font-semibold w-8 text-center text-gray-900 dark:text-white">
-                    {baths === 0 ? 'Any' : `${baths}+`}
+                    {baths === 0 ? t.any : `${baths}+`}
                   </span>
                   <button
                     type="button"
                     onClick={() => setBaths((b) => Math.min(10, b + 1))}
-                    aria-label="Increase bathrooms"
+                    aria-label={t.increaseBathrooms}
                     className="w-8 h-8 rounded-full bg-white dark:bg-gray-700 shadow-xs flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer"
                   >
                     <span className="material-icons text-base">add</span>
@@ -427,7 +431,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
           {/* Section 4: Amenities & Features */}
           <section>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
-              Amenities &amp; Features
+              {t.amenities}
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {AMENITY_OPTIONS.map((amenity) => {
@@ -454,7 +458,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
                       >
                         {amenity.icon}
                       </span>
-                      {amenity.label}
+                      {t.amenityOptions[amenity.id]}
                     </div>
                     {isActive && (
                       <div className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full opacity-100 transition-opacity" />
@@ -473,7 +477,7 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
             onClick={handleClearAll}
             className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors underline decoration-gray-300 underline-offset-4 cursor-pointer"
           >
-            Clear all filters
+            {t.clearAll}
           </button>
           <button
             type="button"
@@ -481,10 +485,10 @@ export const SearchFiltersModal: React.FC<SearchFiltersModalProps> = ({
             className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-medium shadow-lg shadow-primary/30 transition-all hover:shadow-primary/40 flex items-center gap-2 transform active:scale-95 cursor-pointer"
           >
             {isLoadingCount
-              ? 'Loading homes...'
+              ? t.loading
               : matchingCount !== null
-              ? `Show ${matchingCount} ${matchingCount === 1 ? 'Home' : 'Homes'}`
-              : 'Show Homes'}
+              ? plural(matchingCount, t.showCount)
+              : t.showHomes}
             <span className="material-icons text-sm">arrow_forward</span>
           </button>
         </footer>

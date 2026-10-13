@@ -1,0 +1,222 @@
+{
+  "meta": {
+    "siteTitle": "Luxe Estate — Premium Real Estate",
+    "siteDescription": "Discover curated luxury properties, architectural penthouses, and exclusive modern homes.",
+    "homeTitle": "LuxeEstate | Architectural Luxury Homes & Waterfront Sanctuaries",
+    "homeDescription": "Discover exceptional luxury properties, architectural villas, and skyline penthouses curated for the discerning buyer. Real-time listings connected with Supabase.",
+    "propertyNotFoundTitle": "Property Not Found | Luxe Estate",
+    "propertyNotFoundDescription": "The requested luxury property could not be found.",
+    "propertyTitle": "{title} | {category} in {location} - Luxe Estate",
+    "propertyDescription": "Discover {title}, an exclusive {category} with {beds} beds, {baths} baths, and {sqm} m² in {location}."
+  },
+  "language": {
+    "label": "Language"
+  },
+  "nav": {
+    "buy": "Buy",
+    "rent": "Rent",
+    "allHomes": "All Homes",
+    "search": "Search",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "toggleMenu": "Toggle menu"
+  },
+  "categories": {
+    "All": "All",
+    "House": "House",
+    "Apartment": "Apartment",
+    "Villa": "Villa",
+    "Penthouse": "Penthouse"
+  },
+  "listing": {
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "badgeForSale": "FOR SALE",
+    "badgeForRent": "FOR RENT"
+  },
+  "hero": {
+    "title": "Find your {highlight}.",
+    "titleHighlight": "sanctuary",
+    "subtitle": "Explore architectural luxury homes and waterfront villas powered by Supabase.",
+    "searchLabel": "Search properties by city, neighborhood, or address",
+    "searchPlaceholder": "Search by city, neighborhood, or address...",
+    "clearSearch": "Clear search",
+    "search": "Search",
+    "searching": "Searching...",
+    "filters": "Filters"
+  },
+  "featured": {
+    "title": "Featured Collections",
+    "subtitle": "Curated properties for the discerning eye.",
+    "viewAll": "View all"
+  },
+  "market": {
+    "title": "Available Properties",
+    "residences": {
+      "one": "{count} residence",
+      "other": "{count} residences"
+    },
+    "subtitle": "Live catalog synchronized directly with Supabase database.",
+    "tabAll": "All",
+    "tabBuy": "Buy",
+    "tabRent": "Rent",
+    "activeFilters": "Active Filters:",
+    "locationFilter": "Location: “{value}”",
+    "typeFilter": "Type: {value}",
+    "priceFilter": "Price: {min} – {max}",
+    "bedsFilter": "{count}+ Beds",
+    "bathsFilter": "{count}+ Baths",
+    "clearAll": "Clear all filters",
+    "emptyTitle": "No properties found",
+    "emptyDescription": "We couldn't find any properties matching your current filters. Try adjusting the filters or selecting a different category.",
+    "resetAll": "Reset all filters"
+  },
+  "pagination": {
+    "showing": "Showing {start} to {end} of {total} properties",
+    "ariaLabel": "Properties pagination",
+    "prev": "Prev",
+    "next": "Next",
+    "prevPage": "Previous page",
+    "nextPage": "Next page"
+  },
+  "card": {
+    "save": "Save property",
+    "removeSaved": "Remove from saved",
+    "beds": "{count} Beds",
+    "baths": "{count} Baths"
+  },
+  "filters": {
+    "title": "Filters",
+    "close": "Close modal",
+    "location": "Location",
+    "locationPlaceholder": "City, neighborhood, or address",
+    "priceRange": "Price Range",
+    "anyPrice": "Any Price",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "minPriceAria": "Minimum price",
+    "maxPriceAria": "Maximum price",
+    "propertyType": "Property Type",
+    "anyType": "Any Type",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "any": "Any",
+    "decreaseBedrooms": "Decrease bedrooms",
+    "increaseBedrooms": "Increase bedrooms",
+    "decreaseBathrooms": "Decrease bathrooms",
+    "increaseBathrooms": "Increase bathrooms",
+    "amenities": "Amenities & Features",
+    "amenityOptions": {
+      "pool": "Swimming Pool",
+      "gym": "Gym",
+      "parking": "Parking",
+      "ac": "Air Conditioning",
+      "wifi": "High-speed Wifi",
+      "patio": "Patio / Terrace"
+    },
+    "clearAll": "Clear all filters",
+    "loading": "Loading homes...",
+    "showHomes": "Show Homes",
+    "showCount": {
+      "one": "Show {count} Home",
+      "other": "Show {count} Homes"
+    }
+  },
+  "property": {
+    "backToAll": "Back to all properties",
+    "footer": {
+      "rights": "© {year} LuxeEstate Inc. All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "contact": "Contact"
+    },
+    "notFound": {
+      "title": "Property Not Found",
+      "description": "The luxury property you are looking for may have been sold, leased, or is no longer publicly listed.",
+      "returnHome": "Return to All Homes",
+      "explore": "Explore Available Listings"
+    },
+    "gallery": {
+      "featured": "Featured",
+      "premium": "Premium",
+      "viewAllPhotos": "View All Photos ({count})",
+      "photoOf": "Photo {current} of {total}",
+      "photoAlt": "{title} - Photo {number}",
+      "thumbnailAlt": "Thumbnail {number}",
+      "prevPhoto": "Previous photo",
+      "nextPhoto": "Next photo",
+      "closeGallery": "Close photo gallery"
+    },
+    "sidebar": {
+      "loadingMap": "Loading Map...",
+      "topRatedAgent": "Top Rated Agent",
+      "chatAgent": "Chat with agent",
+      "callAgent": "Call agent",
+      "scheduleVisit": "Schedule Visit",
+      "contactAgent": "Contact Agent"
+    },
+    "map": {
+      "openInMaps": "Open in Maps"
+    },
+    "features": {
+      "title": "Property Features",
+      "sqm": "Square Meters",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "garage": "Garage",
+      "about": "About this home",
+      "defaultDescription": "Experience modern luxury in this architecturally stunning {category} located in {location}. Designed with an emphasis on indoor-outdoor living, the residence features floor-to-ceiling glass walls that flood the interiors with natural light.",
+      "extraDescription": "The open-concept kitchen is equipped with top-of-the-line appliances and custom cabinetry, perfect for culinary enthusiasts. Retreat to the primary suite, a sanctuary of relaxation with a spa-inspired bath and private terrace.",
+      "readMore": "Read more",
+      "readLess": "Read less",
+      "amenities": "Amenities",
+      "amenityList": {
+        "smartHome": "Smart Home System",
+        "pool": "Swimming Pool",
+        "climate": "Central Heating & Cooling",
+        "evCharging": "Electric Vehicle Charging",
+        "gym": "Private Gym",
+        "wineCellar": "Wine Cellar"
+      },
+      "estimatedPayment": "Estimated Payment",
+      "startingFrom": "Starting from {amount} with 20% down",
+      "calculateMortgage": "Calculate Mortgage"
+    },
+    "mortgage": {
+      "title": "Mortgage Calculator",
+      "close": "Close calculator",
+      "monthly": "Estimated Monthly Payment",
+      "perMonth": "/mo",
+      "homePrice": "Home Price",
+      "downPayment": "Down Payment ({percent}%)",
+      "interestRate": "Interest Rate",
+      "loanTerm": "Loan Term",
+      "years": "{count} Years",
+      "done": "Done"
+    },
+    "visit": {
+      "close": "Close dialog",
+      "receivedTitle": "Request Received",
+      "receivedText": "Our private client broker for {title} will contact you shortly to confirm your appointment.",
+      "tabVisit": "Schedule Private Visit",
+      "tabContact": "Contact Broker",
+      "titleVisit": "Book a Private Showing",
+      "titleContact": "Inquire About Property",
+      "fullName": "Full Name",
+      "namePlaceholder": "e.g. Alexander Vance",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "date": "Preferred Date",
+      "time": "Time of Day",
+      "morning": "Morning (9am - 12pm)",
+      "afternoon": "Afternoon (1pm - 5pm)",
+      "evening": "Sunset Tour (5pm - 7pm)",
+      "message": "Message or Special Requests (Optional)",
+      "messagePlaceholder": "I'm interested in viewing this property...",
+      "requestAppointment": "Request Appointment",
+      "sendMessage": "Send Message",
+      "whatsapp": "Or chat directly via WhatsApp",
+      "whatsappMessage": "Hi, I'm interested in scheduling a visit to the property: {title} (Ref: {id}). Could you send me more information?"
+    }
+  }
+}

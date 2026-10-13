@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Property } from '@/types/property';
+import { useI18n } from '@/i18n/I18nProvider';
+import { format } from '@/i18n/format';
 
 interface MortgageCalculatorModalProps {
   property: Property;
@@ -14,6 +16,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
   isOpen,
   onClose,
 }) => {
+  const t = useI18n().dict.property.mortgage;
   const [downPaymentPercent, setDownPaymentPercent] = useState<number>(20);
   const [interestRate, setInterestRate] = useState<number>(6.5);
   const [loanTermYears, setLoanTermYears] = useState<number>(30);
@@ -45,7 +48,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close calculator"
+          aria-label={t.close}
           className="absolute top-5 right-5 text-nordic-dark/50 hover:text-nordic-dark transition-colors p-1 rounded-full hover:bg-slate-100 cursor-pointer"
         >
           <span className="material-icons text-xl">close</span>
@@ -56,7 +59,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
             <span className="material-icons text-xl">calculate</span>
           </div>
           <div>
-            <h2 className="text-xl font-light text-nordic-dark">Mortgage Calculator</h2>
+            <h2 className="text-xl font-light text-nordic-dark">{t.title}</h2>
             <p className="text-xs text-nordic-muted">{property.title}</p>
           </div>
         </div>
@@ -64,11 +67,11 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
         {/* Calculated Monthly Box */}
         <div className="bg-mosque/5 p-4 rounded-xl border border-mosque/15 text-center mb-6">
           <span className="text-xs uppercase tracking-wider text-nordic-muted font-medium">
-            Estimated Monthly Payment
+            {t.monthly}
           </span>
           <div className="text-3xl font-light text-mosque mt-1">
             ${Math.round(monthlyPayment).toLocaleString('en-US')}
-            <span className="text-sm font-normal text-nordic-muted">/mo</span>
+            <span className="text-sm font-normal text-nordic-muted">{t.perMonth}</span>
           </div>
         </div>
 
@@ -77,7 +80,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
           {/* Property Price */}
           <div>
             <div className="flex justify-between text-xs text-nordic-dark mb-1">
-              <span>Home Price</span>
+              <span>{t.homePrice}</span>
               <span className="font-semibold">${price.toLocaleString('en-US')}</span>
             </div>
           </div>
@@ -85,7 +88,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
           {/* Down Payment Slider */}
           <div>
             <div className="flex justify-between text-xs text-nordic-dark mb-1">
-              <span>Down Payment ({downPaymentPercent}%)</span>
+              <span>{format(t.downPayment, { percent: downPaymentPercent })}</span>
               <span className="font-semibold text-mosque">
                 ${Math.round(downPaymentAmount).toLocaleString('en-US')}
               </span>
@@ -104,7 +107,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
           {/* Interest Rate */}
           <div>
             <div className="flex justify-between text-xs text-nordic-dark mb-1">
-              <span>Interest Rate</span>
+              <span>{t.interestRate}</span>
               <span className="font-semibold">{interestRate}%</span>
             </div>
             <input
@@ -120,7 +123,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
 
           {/* Loan Term */}
           <div>
-            <span className="block text-xs text-nordic-dark mb-2">Loan Term</span>
+            <span className="block text-xs text-nordic-dark mb-2">{t.loanTerm}</span>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -131,7 +134,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
                     : 'border-slate-200 text-nordic-muted hover:border-slate-300'
                 }`}
               >
-                30 Years
+                {format(t.years, { count: 30 })}
               </button>
               <button
                 type="button"
@@ -142,7 +145,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
                     : 'border-slate-200 text-nordic-muted hover:border-slate-300'
                 }`}
               >
-                15 Years
+                {format(t.years, { count: 15 })}
               </button>
             </div>
           </div>
@@ -153,7 +156,7 @@ export const MortgageCalculatorModal: React.FC<MortgageCalculatorModalProps> = (
           onClick={onClose}
           className="w-full mt-6 py-3 bg-mosque hover:bg-primary-hover text-white text-sm font-medium rounded-lg transition-colors cursor-pointer"
         >
-          Done
+          {t.done}
         </button>
       </div>
     </div>

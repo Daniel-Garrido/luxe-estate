@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Property } from '@/types/property';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface PropertyCardProps {
   property: Property;
@@ -17,6 +18,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   onFavoriteToggle,
   className = '',
 }) => {
+  const { dict } = useI18n();
   const [isSaved, setIsSaved] = useState(property.isSaved || false);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -49,7 +51,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         <button
           type="button"
           onClick={handleFavoriteClick}
-          aria-label={isSaved ? 'Remove from saved' : 'Save property'}
+          aria-label={isSaved ? dict.card.removeSaved : dict.card.save}
           className={`absolute top-3 right-3 p-2 rounded-full transition-colors cursor-pointer ${
             isSaved
               ? 'bg-mosque text-white shadow-sm'
@@ -67,7 +69,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             isRent ? 'bg-mosque/90' : 'bg-nordic-dark/90'
           }`}
         >
-          {property.badge || (isRent ? 'FOR RENT' : 'FOR SALE')}
+          {property.badge || (isRent ? dict.listing.badgeForRent : dict.listing.badgeForSale)}
         </div>
       </div>
 

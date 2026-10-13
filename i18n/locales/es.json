@@ -1,0 +1,222 @@
+{
+  "meta": {
+    "siteTitle": "Luxe Estate — Bienes Raíces Premium",
+    "siteDescription": "Descubre propiedades de lujo seleccionadas, penthouses arquitectónicos y residencias modernas exclusivas.",
+    "homeTitle": "LuxeEstate | Residencias de Lujo Arquitectónicas y Refugios Frente al Mar",
+    "homeDescription": "Descubre propiedades de lujo excepcionales, villas arquitectónicas y penthouses con vistas, seleccionadas para el comprador más exigente. Listados en tiempo real conectados con Supabase.",
+    "propertyNotFoundTitle": "Propiedad no encontrada | Luxe Estate",
+    "propertyNotFoundDescription": "No se pudo encontrar la propiedad de lujo solicitada.",
+    "propertyTitle": "{title} | {category} en {location} - Luxe Estate",
+    "propertyDescription": "Descubre {title} en {location}: {category} con {beds} recámaras, {baths} baños y {sqm} m²."
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "nav": {
+    "buy": "Comprar",
+    "rent": "Rentar",
+    "allHomes": "Todas",
+    "search": "Buscar",
+    "notifications": "Notificaciones",
+    "profile": "Perfil",
+    "toggleMenu": "Abrir menú"
+  },
+  "categories": {
+    "All": "Todas",
+    "House": "Casa",
+    "Apartment": "Departamento",
+    "Villa": "Villa",
+    "Penthouse": "Penthouse"
+  },
+  "listing": {
+    "forSale": "En venta",
+    "forRent": "En renta",
+    "badgeForSale": "EN VENTA",
+    "badgeForRent": "EN RENTA"
+  },
+  "hero": {
+    "title": "Encuentra tu {highlight}.",
+    "titleHighlight": "santuario",
+    "subtitle": "Explora residencias de lujo arquitectónicas y villas frente al mar con tecnología Supabase.",
+    "searchLabel": "Busca propiedades por ciudad, colonia o dirección",
+    "searchPlaceholder": "Busca por ciudad, colonia o dirección...",
+    "clearSearch": "Limpiar búsqueda",
+    "search": "Buscar",
+    "searching": "Buscando...",
+    "filters": "Filtros"
+  },
+  "featured": {
+    "title": "Colecciones Destacadas",
+    "subtitle": "Propiedades seleccionadas para el ojo más exigente.",
+    "viewAll": "Ver todas"
+  },
+  "market": {
+    "title": "Propiedades Disponibles",
+    "residences": {
+      "one": "{count} residencia",
+      "other": "{count} residencias"
+    },
+    "subtitle": "Catálogo en vivo sincronizado directamente con la base de datos de Supabase.",
+    "tabAll": "Todas",
+    "tabBuy": "Comprar",
+    "tabRent": "Rentar",
+    "activeFilters": "Filtros activos:",
+    "locationFilter": "Ubicación: “{value}”",
+    "typeFilter": "Tipo: {value}",
+    "priceFilter": "Precio: {min} – {max}",
+    "bedsFilter": "{count}+ Recámaras",
+    "bathsFilter": "{count}+ Baños",
+    "clearAll": "Limpiar todos los filtros",
+    "emptyTitle": "No se encontraron propiedades",
+    "emptyDescription": "No encontramos propiedades que coincidan con tus filtros actuales. Intenta ajustar los filtros o seleccionar otra categoría.",
+    "resetAll": "Restablecer filtros"
+  },
+  "pagination": {
+    "showing": "Mostrando {start} a {end} de {total} propiedades",
+    "ariaLabel": "Paginación de propiedades",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "prevPage": "Página anterior",
+    "nextPage": "Página siguiente"
+  },
+  "card": {
+    "save": "Guardar propiedad",
+    "removeSaved": "Quitar de guardados",
+    "beds": "{count} Recámaras",
+    "baths": "{count} Baños"
+  },
+  "filters": {
+    "title": "Filtros",
+    "close": "Cerrar",
+    "location": "Ubicación",
+    "locationPlaceholder": "Ciudad, colonia o dirección",
+    "priceRange": "Rango de precio",
+    "anyPrice": "Cualquier precio",
+    "minPrice": "Precio mínimo",
+    "maxPrice": "Precio máximo",
+    "minPriceAria": "Precio mínimo",
+    "maxPriceAria": "Precio máximo",
+    "propertyType": "Tipo de propiedad",
+    "anyType": "Cualquier tipo",
+    "bedrooms": "Recámaras",
+    "bathrooms": "Baños",
+    "any": "Todas",
+    "decreaseBedrooms": "Menos recámaras",
+    "increaseBedrooms": "Más recámaras",
+    "decreaseBathrooms": "Menos baños",
+    "increaseBathrooms": "Más baños",
+    "amenities": "Amenidades y características",
+    "amenityOptions": {
+      "pool": "Alberca",
+      "gym": "Gimnasio",
+      "parking": "Estacionamiento",
+      "ac": "Aire acondicionado",
+      "wifi": "Wifi de alta velocidad",
+      "patio": "Patio / Terraza"
+    },
+    "clearAll": "Limpiar todos los filtros",
+    "loading": "Cargando propiedades...",
+    "showHomes": "Ver propiedades",
+    "showCount": {
+      "one": "Ver {count} propiedad",
+      "other": "Ver {count} propiedades"
+    }
+  },
+  "property": {
+    "backToAll": "Volver a todas las propiedades",
+    "footer": {
+      "rights": "© {year} LuxeEstate Inc. Todos los derechos reservados.",
+      "privacy": "Política de privacidad",
+      "terms": "Términos de servicio",
+      "contact": "Contacto"
+    },
+    "notFound": {
+      "title": "Propiedad no encontrada",
+      "description": "La propiedad de lujo que buscas pudo haberse vendido, rentado o ya no está publicada.",
+      "returnHome": "Volver a todas las propiedades",
+      "explore": "Explorar propiedades disponibles"
+    },
+    "gallery": {
+      "featured": "Destacada",
+      "premium": "Premium",
+      "viewAllPhotos": "Ver todas las fotos ({count})",
+      "photoOf": "Foto {current} de {total}",
+      "photoAlt": "{title} - Foto {number}",
+      "thumbnailAlt": "Miniatura {number}",
+      "prevPhoto": "Foto anterior",
+      "nextPhoto": "Foto siguiente",
+      "closeGallery": "Cerrar galería"
+    },
+    "sidebar": {
+      "loadingMap": "Cargando mapa...",
+      "topRatedAgent": "Agente mejor calificado",
+      "chatAgent": "Chatear con el agente",
+      "callAgent": "Llamar al agente",
+      "scheduleVisit": "Agendar visita",
+      "contactAgent": "Contactar agente"
+    },
+    "map": {
+      "openInMaps": "Abrir en Maps"
+    },
+    "features": {
+      "title": "Características",
+      "sqm": "Metros cuadrados",
+      "bedrooms": "Recámaras",
+      "bathrooms": "Baños",
+      "garage": "Cochera",
+      "about": "Acerca de esta propiedad",
+      "defaultDescription": "Vive el lujo moderno en esta impresionante propiedad ({category}) ubicada en {location}. Diseñada con énfasis en la vida interior-exterior, la residencia cuenta con muros de cristal de piso a techo que inundan los interiores de luz natural.",
+      "extraDescription": "La cocina abierta está equipada con electrodomésticos de primera línea y gabinetes a la medida, perfecta para los amantes de la cocina. Relájate en la suite principal, un santuario de descanso con baño estilo spa y terraza privada.",
+      "readMore": "Leer más",
+      "readLess": "Leer menos",
+      "amenities": "Amenidades",
+      "amenityList": {
+        "smartHome": "Sistema de casa inteligente",
+        "pool": "Alberca",
+        "climate": "Calefacción y aire central",
+        "evCharging": "Cargador para vehículo eléctrico",
+        "gym": "Gimnasio privado",
+        "wineCellar": "Cava de vinos"
+      },
+      "estimatedPayment": "Pago estimado",
+      "startingFrom": "Desde {amount} con 20% de enganche",
+      "calculateMortgage": "Calcular hipoteca"
+    },
+    "mortgage": {
+      "title": "Calculadora de hipoteca",
+      "close": "Cerrar calculadora",
+      "monthly": "Pago mensual estimado",
+      "perMonth": "/mes",
+      "homePrice": "Precio de la propiedad",
+      "downPayment": "Enganche ({percent}%)",
+      "interestRate": "Tasa de interés",
+      "loanTerm": "Plazo del crédito",
+      "years": "{count} años",
+      "done": "Listo"
+    },
+    "visit": {
+      "close": "Cerrar",
+      "receivedTitle": "Solicitud recibida",
+      "receivedText": "Nuestro asesor privado para {title} se pondrá en contacto contigo en breve para confirmar tu cita.",
+      "tabVisit": "Agendar visita privada",
+      "tabContact": "Contactar asesor",
+      "titleVisit": "Reserva una visita privada",
+      "titleContact": "Pregunta por esta propiedad",
+      "fullName": "Nombre completo",
+      "namePlaceholder": "ej. Alejandro Vance",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "date": "Fecha preferida",
+      "time": "Horario",
+      "morning": "Mañana (9am - 12pm)",
+      "afternoon": "Tarde (1pm - 5pm)",
+      "evening": "Recorrido al atardecer (5pm - 7pm)",
+      "message": "Mensaje o solicitudes especiales (opcional)",
+      "messagePlaceholder": "Me interesa visitar esta propiedad...",
+      "requestAppointment": "Solicitar cita",
+      "sendMessage": "Enviar mensaje",
+      "whatsapp": "O escríbenos directamente por WhatsApp",
+      "whatsappMessage": "Hola, me interesa agendar una visita para la propiedad: {title} (Ref: {id}). ¿Podrían brindarme más información?"
+    }
+  }
+}
