@@ -19,7 +19,10 @@
     "search": "Search",
     "notifications": "Notifications",
     "profile": "Profile",
-    "toggleMenu": "Toggle menu"
+    "toggleMenu": "Toggle menu",
+    "login": "Log in",
+    "logout": "Log out",
+    "account": "My account"
   },
   "categories": {
     "All": "All",
@@ -218,5 +221,24 @@
       "whatsapp": "Or chat directly via WhatsApp",
       "whatsappMessage": "Hi, I'm interested in scheduling a visit to the property: {title} (Ref: {id}). Could you send me more information?"
     }
+  },
+  "auth": {
+    "loginTitle": "Welcome to LuxeEstate",
+    "loginSubtitle": "Unlock exclusive properties worldwide.",
+    "signupTitle": "Join LuxeEstate",
+    "signupSubtitle": "Create your account and unlock exclusive properties worldwide.",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "redirecting": "Redirecting…",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "haveAccount": "Already have an account?",
+    "logIn": "Log in",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "help": "Help Center",
+    "error": "We couldn't sign you in. Please try again.",
+    "metaTitle": "Log in | Luxe Estate",
+    "metaDescription": "Log in to LuxeEstate with Google or GitHub."
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useId, useCallback } from 'react';
-import { getPropertyFilterCount } from '@/lib/supabase';
+import { getPropertyFilterCount } from '@/lib/supabase/properties';
 import { PropertyCategory, ListingType } from '@/types/property';
 import { useI18n } from '@/i18n/I18nProvider';
 import { plural } from '@/i18n/format';

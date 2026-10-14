@@ -6,7 +6,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { PropertyGallery } from '@/components/property/PropertyGallery';
 import { PropertySidebar } from '@/components/property/PropertySidebar';
 import { PropertyFeatures } from '@/components/property/PropertyFeatures';
-import { getPropertyBySlug, getAllPropertySlugs } from '@/lib/supabase';
+import { getPropertyBySlug, getAllPropertySlugs } from '@/lib/supabase/properties';
 import { getDictionary } from '@/i18n/dictionaries';
 import { format } from '@/i18n/format';
 

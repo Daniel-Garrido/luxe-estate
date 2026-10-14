@@ -1,13 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database, PropertyRow } from '@/types/database.types';
 import { Property, PropertyCategory, ListingType } from '@/types/property';
-
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  'https://bjjymugrdmnvkphzniba.supabase.co';
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqanltdWdyZG1udmtwaHpuaWJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5Mjg5NDgsImV4cCI6MjEwNTUwNDk0OH0.dHp-iK2_k12NDM2YZzEOjlamufIOLzV9IQXAAMDUcXA';
+import { supabaseUrl, supabaseAnonKey } from '@/lib/supabase/config';
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 

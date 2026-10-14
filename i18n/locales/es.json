@@ -19,7 +19,10 @@
     "search": "Buscar",
     "notifications": "Notificaciones",
     "profile": "Perfil",
-    "toggleMenu": "Abrir menú"
+    "toggleMenu": "Abrir menú",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "account": "Mi cuenta"
   },
   "categories": {
     "All": "Todas",
@@ -218,5 +221,24 @@
       "whatsapp": "O escríbenos directamente por WhatsApp",
       "whatsappMessage": "Hola, me interesa agendar una visita para la propiedad: {title} (Ref: {id}). ¿Podrían brindarme más información?"
     }
+  },
+  "auth": {
+    "loginTitle": "Bienvenido a LuxeEstate",
+    "loginSubtitle": "Accede a propiedades exclusivas en todo el mundo.",
+    "signupTitle": "Crea tu cuenta en LuxeEstate",
+    "signupSubtitle": "Únete y descubre propiedades exclusivas en todo el mundo.",
+    "continueWithGoogle": "Continuar con Google",
+    "continueWithGithub": "Continuar con GitHub",
+    "redirecting": "Redirigiendo…",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "logIn": "Inicia sesión",
+    "privacy": "Política de privacidad",
+    "terms": "Términos del servicio",
+    "help": "Centro de ayuda",
+    "error": "No pudimos iniciar tu sesión. Inténtalo de nuevo.",
+    "metaTitle": "Iniciar sesión | Luxe Estate",
+    "metaDescription": "Inicia sesión en LuxeEstate con Google o GitHub."
   }
 }

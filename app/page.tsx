@@ -7,7 +7,7 @@ import { NewInMarketSection } from '@/components/home/NewInMarketSection';
 import {
   getPaginatedProperties,
   getFeaturedPropertiesFromSupabase,
-} from '@/lib/supabase';
+} from '@/lib/supabase/properties';
 import { PropertyCategory, ListingType } from '@/types/property';
 import { getDictionary } from '@/i18n/dictionaries';
 

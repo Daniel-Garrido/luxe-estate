@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ListingType } from '@/types/property';
 import { useI18n } from '@/i18n/I18nProvider';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
+import { UserMenu } from '@/components/layout/UserMenu';
 
 interface NavbarProps {
   activeListingType?: ListingType;
@@ -75,19 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="material-icons">notifications_none</span>
               <span className="absolute top-0 right-0 w-2 h-2 bg-mosque rounded-full border-2 border-clear-day" />
             </button>
-            <button
-              type="button"
-              aria-label={dict.nav.profile}
-              className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2 cursor-pointer"
-            >
-              <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all">
-                <img
-                  alt={dict.nav.profile}
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAWhQZ663Bd08kmzjbOPmUk4UIxYooNONShMEFXLR-DtmVi6Oz-TiaY77SPwFk7g0OobkeZEOMvt6v29mSOD0Xm2g95WbBG3ZjWXmiABOUwGU0LOySRfVDo-JTXQ0-gtwjWxbmue0qDm91m-zEOEZwAW6iRFB1qC1bAU-wkjxm67Sbztq8w7srHkFT9bVEC86qG-FzhOBTomhAurNRmx9l8Yfqabk328NfdKuVLckgCdaPsNFE3yN65MeoRi05GA_gXIMwG4YDIeA"
-                />
-              </div>
-            </button>
+            <UserMenu />
 
             {/* Mobile menu hamburger toggle */}
             <button

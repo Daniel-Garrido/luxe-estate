@@ -6,9 +6,10 @@ import {
   isLocale,
   matchLocale,
 } from '@/i18n/config';
+import { updateSession } from '@/lib/supabase/proxy';
 
 // On the first visit, detect the browser language and store it in a cookie
-export function proxy(request: NextRequest) {
+function applyLocale(request: NextRequest): NextResponse {
   if (isLocale(request.cookies.get(LOCALE_COOKIE)?.value)) {
     return NextResponse.next();
   }
@@ -25,6 +26,11 @@ export function proxy(request: NextRequest) {
     sameSite: 'lax',
   });
   return response;
+}
+
+// Then keep the Supabase auth session fresh
+export async function proxy(request: NextRequest) {
+  return updateSession(request, applyLocale(request));
 }
 
 export const config = {
