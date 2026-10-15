@@ -1,3 +1,5 @@
+import type { UserRole } from '@/types/database.types';
+
 export type OAuthProvider = 'google' | 'github';
 
 // Serializable subset of the Supabase user that the UI needs
@@ -7,4 +9,5 @@ export interface AuthUser {
   name: string | null;
   avatarUrl: string | null;
   provider: string | null;
+  role: UserRole;
 }

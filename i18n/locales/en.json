@@ -22,7 +22,8 @@
     "toggleMenu": "Toggle menu",
     "login": "Log in",
     "logout": "Log out",
-    "account": "My account"
+    "account": "My account",
+    "admin": "Admin dashboard"
   },
   "categories": {
     "All": "All",
@@ -240,5 +241,73 @@
     "error": "We couldn't sign you in. Please try again.",
     "metaTitle": "Log in | Luxe Estate",
     "metaDescription": "Log in to LuxeEstate with Google or GitHub."
+  },
+  "admin": {
+    "metaTitle": "Admin dashboard | Luxe Estate",
+    "brand": "Admin",
+    "nav": {
+      "properties": "Properties",
+      "users": "Users",
+      "viewSite": "View site"
+    },
+    "footer": "© {year} LuxeEstate Inc. Admin dashboard.",
+    "search": "Search",
+    "clearSearch": "Clear search",
+    "showing": "Showing {start} to {end} of {total} results",
+    "prev": "Previous",
+    "next": "Next",
+    "paginationLabel": "Pagination",
+    "properties": {
+      "title": "Properties",
+      "subtitle": "Review the current portfolio of published properties.",
+      "searchPlaceholder": "Search by title or location...",
+      "statTotal": "Total listings",
+      "statForSale": "For sale",
+      "statForRent": "For rent",
+      "statFeatured": "Featured",
+      "colDetails": "Property details",
+      "colPrice": "Price",
+      "colType": "Type",
+      "colActions": "Actions",
+      "featured": "Featured",
+      "view": "View property",
+      "specs": "{beds} beds · {baths} baths · {sqm} m²",
+      "empty": "No properties found."
+    },
+    "users": {
+      "title": "User Directory",
+      "subtitle": "Manage access and roles for registered users.",
+      "searchPlaceholder": "Search by name or email...",
+      "tabAll": "All users",
+      "tabs": {
+        "admin": "Admins",
+        "broker": "Brokers",
+        "agent": "Agents",
+        "viewer": "Viewers"
+      },
+      "colUser": "User",
+      "colRole": "Role",
+      "colDetails": "Details",
+      "colActions": "Actions",
+      "provider": "Provider",
+      "joined": "Joined",
+      "you": "You",
+      "changeRole": "Change role",
+      "saving": "Saving…",
+      "cannotChangeOwn": "You can't change your own role",
+      "errors": {
+        "forbidden": "You don't have permission to change roles.",
+        "self": "You can't change your own role.",
+        "invalid": "Invalid role.",
+        "failed": "Couldn't update the role. Please try again."
+      },
+      "empty": "No users found."
+    },
+    "roles": {
+      "admin": "Administrator",
+      "broker": "Broker",
+      "agent": "Agent",
+      "viewer": "Viewer"
+    }
   }
 }

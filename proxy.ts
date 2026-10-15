@@ -7,6 +7,7 @@ import {
   matchLocale,
 } from '@/i18n/config';
 import { updateSession } from '@/lib/supabase/proxy';
+import { protectAdminRoutes } from '@/lib/auth/proxy';
 
 // On the first visit, detect the browser language and store it in a cookie
 function applyLocale(request: NextRequest): NextResponse {
@@ -28,9 +29,10 @@ function applyLocale(request: NextRequest): NextResponse {
   return response;
 }
 
-// Then keep the Supabase auth session fresh
+// Then keep the Supabase auth session fresh and validate the user's role on /admin
 export async function proxy(request: NextRequest) {
-  return updateSession(request, applyLocale(request));
+  const session = await updateSession(request, applyLocale(request));
+  return protectAdminRoutes(request, session);
 }
 
 export const config = {

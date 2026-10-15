@@ -22,7 +22,8 @@
     "toggleMenu": "Abrir menú",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "account": "Mi cuenta"
+    "account": "Mi cuenta",
+    "admin": "Panel de administración"
   },
   "categories": {
     "All": "Todas",
@@ -240,5 +241,73 @@
     "error": "No pudimos iniciar tu sesión. Inténtalo de nuevo.",
     "metaTitle": "Iniciar sesión | Luxe Estate",
     "metaDescription": "Inicia sesión en LuxeEstate con Google o GitHub."
+  },
+  "admin": {
+    "metaTitle": "Panel de administración | Luxe Estate",
+    "brand": "Admin",
+    "nav": {
+      "properties": "Propiedades",
+      "users": "Usuarios",
+      "viewSite": "Ver sitio"
+    },
+    "footer": "© {year} LuxeEstate Inc. Panel de administración.",
+    "search": "Buscar",
+    "clearSearch": "Limpiar búsqueda",
+    "showing": "Mostrando {start} a {end} de {total} resultados",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "paginationLabel": "Paginación",
+    "properties": {
+      "title": "Propiedades",
+      "subtitle": "Consulta el portafolio actual de propiedades publicadas.",
+      "searchPlaceholder": "Buscar por título o ubicación...",
+      "statTotal": "Total de propiedades",
+      "statForSale": "En venta",
+      "statForRent": "En renta",
+      "statFeatured": "Destacadas",
+      "colDetails": "Detalles de la propiedad",
+      "colPrice": "Precio",
+      "colType": "Tipo",
+      "colActions": "Acciones",
+      "featured": "Destacada",
+      "view": "Ver propiedad",
+      "specs": "{beds} rec. · {baths} baños · {sqm} m²",
+      "empty": "No se encontraron propiedades."
+    },
+    "users": {
+      "title": "Directorio de usuarios",
+      "subtitle": "Administra el acceso y los roles de los usuarios registrados.",
+      "searchPlaceholder": "Buscar por nombre o correo...",
+      "tabAll": "Todos",
+      "tabs": {
+        "admin": "Admins",
+        "broker": "Brokers",
+        "agent": "Agentes",
+        "viewer": "Visitantes"
+      },
+      "colUser": "Usuario",
+      "colRole": "Rol",
+      "colDetails": "Detalles",
+      "colActions": "Acciones",
+      "provider": "Proveedor",
+      "joined": "Registro",
+      "you": "Tú",
+      "changeRole": "Cambiar rol",
+      "saving": "Guardando…",
+      "cannotChangeOwn": "No puedes cambiar tu propio rol",
+      "errors": {
+        "forbidden": "No tienes permiso para cambiar roles.",
+        "self": "No puedes cambiar tu propio rol.",
+        "invalid": "Rol no válido.",
+        "failed": "No se pudo actualizar el rol. Inténtalo de nuevo."
+      },
+      "empty": "No se encontraron usuarios."
+    },
+    "roles": {
+      "admin": "Administrador",
+      "broker": "Broker",
+      "agent": "Agente",
+      "viewer": "Visitante"
+    }
   }
 }

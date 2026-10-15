@@ -1,17 +1,25 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/types/database.types';
 import { supabaseUrl, supabaseAnonKey } from '@/lib/supabase/config';
+
+export interface SessionResult {
+  response: NextResponse;
+  supabase: SupabaseClient<Database>;
+  userId: string | null;
+}
 
 // Refreshes an expired Supabase session and writes the new auth cookies
 // to both the request (for Server Components) and the response (for the browser).
 export async function updateSession(
   request: NextRequest,
   response: NextResponse
-): Promise<NextResponse> {
+): Promise<SessionResult> {
   let supabaseResponse = response;
 
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -30,7 +38,11 @@ export async function updateSession(
   });
 
   // Do not run code between createServerClient and getClaims: it triggers the token refresh
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
 
-  return supabaseResponse;
+  return {
+    response: supabaseResponse,
+    supabase,
+    userId: data?.claims?.sub ?? null,
+  };
 }

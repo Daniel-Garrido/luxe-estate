@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { signOut } from '@/app/auth/actions';
 import { useI18n } from '@/i18n/I18nProvider';
+import { ADMIN_PATH, canAccessAdmin } from '@/lib/auth/roles';
 
 export const UserMenu: React.FC = () => {
   const user = useAuth();
@@ -99,6 +100,17 @@ export const UserMenu: React.FC = () => {
               <p className="text-xs text-nordic-dark/60 truncate">{user.email}</p>
             )}
           </div>
+          {canAccessAdmin(user.role) && (
+            <Link
+              href={ADMIN_PATH}
+              role="menuitem"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-nordic-dark hover:bg-hint-green/30 transition-colors"
+            >
+              <span className="material-icons text-base">dashboard</span>
+              {dict.nav.admin}
+            </Link>
+          )}
           <button
             type="button"
             role="menuitem"
