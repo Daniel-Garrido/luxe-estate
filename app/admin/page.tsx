@@ -1,5 +1,6 @@
 import React from 'react';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { AdminAddButton } from '@/components/admin/AdminAddButton';
 import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { AdminPagination } from '@/components/admin/AdminPagination';
 import { AdminPropertyRow } from '@/components/admin/AdminPropertyRow';
@@ -46,6 +47,7 @@ export default async function AdminPropertiesPage({ searchParams }: AdminPropert
           submitLabel={t.search}
           clearLabel={t.clearSearch}
         />
+        <AdminAddButton href="/admin/properties/new" label={t.addProperty} />
       </AdminPageHeader>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">

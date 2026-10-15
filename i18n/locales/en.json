@@ -308,6 +308,14 @@
       "broker": "Broker",
       "agent": "Agent",
       "viewer": "Viewer"
+    },
+    "addProperty": "Add property",
+    "addUser": "Add user",
+    "page": "Page {page}",
+    "comingSoon": {
+      "title": "Coming soon",
+      "body": "This section is still under construction.",
+      "back": "Go back"
     }
   }
 }

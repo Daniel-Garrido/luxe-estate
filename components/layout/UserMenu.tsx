@@ -6,9 +6,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { signOut } from '@/app/auth/actions';
 import { useI18n } from '@/i18n/I18nProvider';
-import { ADMIN_PATH, canAccessAdmin } from '@/lib/auth/roles';
+import { ADMIN_PATH, canAccessAdmin, isAdminPath } from '@/lib/auth/roles';
 
-export const UserMenu: React.FC = () => {
+interface UserMenuProps {
+  // Also show the user's name and role next to the avatar (admin navbar)
+  showIdentity?: boolean;
+}
+
+export const UserMenu: React.FC<UserMenuProps> = ({ showIdentity = false }) => {
   const user = useAuth();
   const { dict } = useI18n();
   const pathname = usePathname();
@@ -50,11 +55,14 @@ export const UserMenu: React.FC = () => {
 
   const initial = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
   const showAvatar = user.avatarUrl && !avatarFailed;
+  const inAdmin = isAdminPath(pathname);
 
   const handleSignOut = () => {
     setIsOpen(false);
     startTransition(async () => {
       await signOut();
+      // Admin pages would bounce to the login screen, so go back to the public site
+      if (inAdmin) router.replace('/');
       router.refresh();
     });
   };
@@ -68,9 +76,17 @@ export const UserMenu: React.FC = () => {
         aria-haspopup="menu"
         aria-expanded={isOpen}
         disabled={isPending}
-        className="flex items-center gap-2 cursor-pointer disabled:opacity-60"
+        className="flex items-center gap-3 cursor-pointer disabled:opacity-60 group"
       >
-        <div className="w-9 h-9 rounded-full bg-mosque overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all flex items-center justify-center text-white text-sm font-semibold">
+        {showIdentity && (
+          <span className="hidden sm:flex flex-col items-end leading-tight max-w-40">
+            <span className="text-sm font-semibold text-nordic truncate max-w-full">
+              {user.name || user.email}
+            </span>
+            <span className="text-xs text-nordic-muted">{dict.admin.roles[user.role]}</span>
+          </span>
+        )}
+        <div className="w-9 h-9 flex-shrink-0 rounded-full bg-mosque overflow-hidden ring-2 ring-transparent group-hover:ring-mosque transition-all flex items-center justify-center text-white text-sm font-semibold">
           {showAvatar ? (
             // Plain <img>: avatar hosts vary per provider and are already sized
             // eslint-disable-next-line @next/next/no-img-element
@@ -99,8 +115,23 @@ export const UserMenu: React.FC = () => {
             {user.email && (
               <p className="text-xs text-nordic-dark/60 truncate">{user.email}</p>
             )}
+            {inAdmin && (
+              <span className="inline-block mt-1.5 text-[11px] font-semibold uppercase tracking-wider bg-hint-green text-mosque rounded px-1.5 py-0.5">
+                {dict.admin.roles[user.role]}
+              </span>
+            )}
           </div>
-          {canAccessAdmin(user.role) && (
+          {inAdmin ? (
+            <Link
+              href="/"
+              role="menuitem"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-nordic-dark hover:bg-hint-green/30 transition-colors"
+            >
+              <span className="material-icons text-base">open_in_new</span>
+              {dict.admin.nav.viewSite}
+            </Link>
+          ) : canAccessAdmin(user.role) && (
             <Link
               href={ADMIN_PATH}
               role="menuitem"
@@ -115,7 +146,7 @@ export const UserMenu: React.FC = () => {
             type="button"
             role="menuitem"
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-nordic-dark hover:bg-hint-green/30 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-4 py-2 mt-1 border-t border-nordic-dark/10 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
           >
             <span className="material-icons text-base">logout</span>
             {dict.nav.logout}

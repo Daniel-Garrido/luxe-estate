@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { AdminAddButton } from '@/components/admin/AdminAddButton';
 import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { AdminPagination } from '@/components/admin/AdminPagination';
 import { AdminUserCard } from '@/components/admin/AdminUserCard';
@@ -56,6 +57,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
           clearLabel={t.clearSearch}
           hiddenParams={{ role }}
         />
+        <AdminAddButton href="/admin/users/new" label={t.addUser} />
       </AdminPageHeader>
 
       {/* Role tabs */}

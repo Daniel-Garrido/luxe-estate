@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { getDictionary } from '@/i18n/dictionaries';
-import { formatRich } from '@/i18n/format';
+import { format, formatRich } from '@/i18n/format';
 
 interface AdminPaginationProps {
   currentPage: number;
@@ -10,6 +10,19 @@ interface AdminPaginationProps {
   pageSize: number;
   // Builds the URL for a page while keeping the current filters
   hrefForPage: (page: number) => string;
+}
+
+// First, last and the pages around the current one; gaps become an ellipsis
+function getPageItems(current: number, total: number): (number | 'gap')[] {
+  const pages = new Set([1, total, current - 1, current, current + 1]);
+  const sorted = [...pages].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
+
+  return sorted.flatMap((page, i) => {
+    const prev = sorted[i - 1];
+    if (prev === undefined || page - prev === 1) return [page];
+    // A gap of a single page shows that page instead of "…"
+    return page - prev === 2 ? [prev + 1, page] : ['gap' as const, page];
+  });
 }
 
 export const AdminPagination = async ({
@@ -24,21 +37,24 @@ export const AdminPagination = async ({
   const t = (await getDictionary()).admin;
   const start = (currentPage - 1) * pageSize + 1;
   const end = Math.min(currentPage * pageSize, totalCount);
+  const hasPrev = currentPage > 1;
+  const hasNext = currentPage < totalPages;
 
-  const button = (label: string, page: number, enabled: boolean) =>
+  const arrow = (label: string, icon: string, page: number, enabled: boolean) =>
     enabled ? (
       <Link
         href={hrefForPage(page)}
-        className="px-4 py-2 text-sm font-medium rounded-lg border border-nordic-dark/10 bg-white text-nordic hover:bg-hint-green/40 hover:text-mosque transition-colors"
+        aria-label={label}
+        className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-nordic-muted hover:bg-hint-green/40 hover:text-mosque transition-colors"
       >
-        {label}
+        <span className="material-icons text-xl">{icon}</span>
       </Link>
     ) : (
       <span
         aria-disabled="true"
-        className="px-4 py-2 text-sm font-medium rounded-lg border border-nordic-dark/5 text-nordic-muted/40 cursor-not-allowed select-none"
+        className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-nordic-muted/30 cursor-not-allowed select-none"
       >
-        {label}
+        <span className="material-icons text-xl">{icon}</span>
       </span>
     );
 
@@ -51,10 +67,33 @@ export const AdminPagination = async ({
           total: <span className="font-semibold text-nordic">{totalCount}</span>,
         })}
       </p>
-      <nav aria-label={t.paginationLabel} className="flex gap-2">
-        {button(t.prev, currentPage - 1, currentPage > 1)}
-        {button(t.next, currentPage + 1, currentPage < totalPages)}
-      </nav>
+      {totalPages > 1 && (
+        <nav aria-label={t.paginationLabel} className="flex items-center gap-1">
+          {arrow(t.prev, 'chevron_left', currentPage - 1, hasPrev)}
+          {getPageItems(currentPage, totalPages).map((item, i) =>
+            item === 'gap' ? (
+              <span key={`gap-${i}`} className="w-9 text-center text-sm text-nordic-muted/60 select-none">
+                …
+              </span>
+            ) : (
+              <Link
+                key={item}
+                href={hrefForPage(item)}
+                aria-label={format(t.page, { page: item })}
+                aria-current={item === currentPage ? 'page' : undefined}
+                className={`inline-flex items-center justify-center min-w-9 h-9 px-3 rounded-lg text-sm font-medium transition-colors ${
+                  item === currentPage
+                    ? 'bg-mosque text-white shadow-sm'
+                    : 'text-nordic-dark/70 hover:bg-hint-green/40 hover:text-mosque'
+                }`}
+              >
+                {item}
+              </Link>
+            )
+          )}
+          {arrow(t.next, 'chevron_right', currentPage + 1, hasNext)}
+        </nav>
+      )}
     </div>
   );
 };

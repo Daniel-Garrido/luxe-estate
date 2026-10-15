@@ -308,6 +308,14 @@
       "broker": "Broker",
       "agent": "Agente",
       "viewer": "Visitante"
+    },
+    "addProperty": "Agregar propiedad",
+    "addUser": "Agregar usuario",
+    "page": "Página {page}",
+    "comingSoon": {
+      "title": "Próximamente",
+      "body": "Esta sección todavía está en construcción.",
+      "back": "Volver"
     }
   }
 }
