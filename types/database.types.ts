@@ -28,6 +28,10 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           is_featured: boolean
+          is_published: boolean
+          amenities: string[]
+          parking: number
+          year_built: number | null
           listing_type: 'buy' | 'rent'
           price: number
           price_period: string | null
@@ -54,6 +58,10 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           is_featured?: boolean
+          is_published?: boolean
+          amenities?: string[]
+          parking?: number
+          year_built?: number | null
           listing_type: 'buy' | 'rent'
           price: number
           price_period?: string | null
@@ -80,6 +88,10 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           is_featured?: boolean
+          is_published?: boolean
+          amenities?: string[]
+          parking?: number
+          year_built?: number | null
           listing_type?: 'buy' | 'rent'
           price?: number
           price_period?: string | null

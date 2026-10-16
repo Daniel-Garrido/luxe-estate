@@ -13,6 +13,7 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
   const t = dict.admin.properties;
   const isRent = property.listingType === 'rent';
   const cover = property.images[0];
+  const isDraft = property.isPublished === false;
 
   return (
     <tr className="border-t border-nordic-dark/5 hover:bg-clear-day/50 transition-colors">
@@ -33,6 +34,11 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
               {property.isFeatured && (
                 <span className="material-icons text-base text-amber-500" title={t.featured}>
                   star
+                </span>
+              )}
+              {isDraft && (
+                <span className="flex-shrink-0 text-[10px] font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200 rounded px-1.5 py-0.5">
+                  {t.draft}
                 </span>
               )}
             </div>
@@ -66,16 +72,27 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
           {isRent ? dict.listing.forRent : dict.listing.forSale}
         </span>
       </td>
-      <td className="px-6 py-4 text-right">
+      <td className="px-6 py-4 text-right whitespace-nowrap">
         <Link
-          href={`/properties/${property.slug}`}
-          target="_blank"
-          aria-label={`${t.view}: ${property.title}`}
-          title={t.view}
+          href={`/admin/properties/${encodeURIComponent(property.id)}/edit`}
+          aria-label={`${t.edit}: ${property.title}`}
+          title={t.edit}
           className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-nordic-muted hover:text-mosque hover:bg-hint-green/40 transition-colors"
         >
-          <span className="material-icons text-xl">visibility</span>
+          <span className="material-icons text-xl">edit</span>
         </Link>
+        {/* Drafts are not public yet, so there is nothing to view */}
+        {!isDraft && (
+          <Link
+            href={`/properties/${property.slug}`}
+            target="_blank"
+            aria-label={`${t.view}: ${property.title}`}
+            title={t.view}
+            className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-nordic-muted hover:text-mosque hover:bg-hint-green/40 transition-colors"
+          >
+            <span className="material-icons text-xl">visibility</span>
+          </Link>
+        )}
       </td>
     </tr>
   );

@@ -1,8 +1,7 @@
 // Server-only: data for the admin dashboard
 import { createClient } from '@/lib/supabase/server';
-import { supabase as publicClient } from '@/lib/supabase/properties';
 import { USER_ROLES } from '@/lib/auth/roles';
-import type { ProfileRow, UserRole } from '@/types/database.types';
+import type { ProfileRow, PropertyRow, UserRole } from '@/types/database.types';
 
 export interface PropertyStats {
   total: number;
@@ -11,8 +10,10 @@ export interface PropertyStats {
   featured: number;
 }
 
+// Uses the admin's session so drafts are counted too
 export async function getPropertyStats(): Promise<PropertyStats> {
-  const base = () => publicClient.from('properties').select('id', { count: 'exact', head: true });
+  const supabase = await createClient();
+  const base = () => supabase.from('properties').select('id', { count: 'exact', head: true });
 
   const results = await Promise.all([
     base(),
@@ -26,6 +27,14 @@ export async function getPropertyStats(): Promise<PropertyStats> {
   });
 
   return { total, forSale, forRent, featured };
+}
+
+// Raw row for the edit form; null when it does not exist (RLS also hides drafts from non-admins)
+export async function getPropertyForEdit(id: string): Promise<PropertyRow | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from('properties').select('*').eq('id', id).maybeSingle();
+  if (error) console.error('Error fetching property for edit:', error.message);
+  return data ?? null;
 }
 
 export interface FetchProfilesParams {

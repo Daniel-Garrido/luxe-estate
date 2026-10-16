@@ -7,13 +7,14 @@ import { AdminPropertyRow } from '@/components/admin/AdminPropertyRow';
 import { StatCard } from '@/components/admin/StatCard';
 import { getPaginatedProperties } from '@/lib/supabase/properties';
 import { getPropertyStats } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/auth/dal';
 import { getDictionary } from '@/i18n/dictionaries';
 
 const PAGE_SIZE = 10;
 
 interface AdminPropertiesPageProps {
-  searchParams: Promise<{ page?: string; q?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; saved?: string }>;
 }
 
 export default async function AdminPropertiesPage({ searchParams }: AdminPropertiesPageProps) {
@@ -25,9 +26,16 @@ export default async function AdminPropertiesPage({ searchParams }: AdminPropert
   const [dict, stats, result] = await Promise.all([
     getDictionary(),
     getPropertyStats(),
-    getPaginatedProperties({ page, pageSize: PAGE_SIZE, searchQuery: q }),
+    // Session client: RLS lets admins see drafts too
+    getPaginatedProperties({ page, pageSize: PAGE_SIZE, searchQuery: q, client: await createClient() }),
   ]);
   const t = dict.admin;
+  // Set by the property form after saving
+  const savedKey = params.saved;
+  const savedMessage =
+    savedKey === 'created' || savedKey === 'updated' || savedKey === 'draft'
+      ? t.properties.saved[savedKey]
+      : null;
 
   const hrefForPage = (p: number) => {
     const query = new URLSearchParams();
@@ -49,6 +57,16 @@ export default async function AdminPropertiesPage({ searchParams }: AdminPropert
         />
         <AdminAddButton href="/admin/properties/new" label={t.addProperty} />
       </AdminPageHeader>
+
+      {savedMessage && (
+        <p
+          role="status"
+          className="mb-8 flex items-center gap-2 rounded-xl border border-hint-green bg-hint-green/40 px-4 py-3 text-sm font-medium text-mosque"
+        >
+          <span className="material-icons text-base">check_circle</span>
+          {savedMessage}
+        </p>
+      )}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10">
         <StatCard label={t.properties.statTotal} value={stats.total} icon="apartment" />

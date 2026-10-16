@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Database, PropertyRow } from '@/types/database.types';
 import { Property, PropertyCategory, ListingType } from '@/types/property';
 import { supabaseUrl, supabaseAnonKey } from '@/lib/supabase/config';
@@ -38,9 +38,10 @@ export function mapRowToProperty(row: PropertyRow): Property {
       lat: Number(row.latitude) || 37.4419,
       lng: Number(row.longitude) || -122.1430,
     },
-    garage: 2,
+    garage: row.parking ?? 0,
+    yearBuilt: row.year_built ?? undefined,
     // Translation keys from `property.features.amenityList` in i18n/locales/*.json
-    amenities: ['smartHome', 'pool', 'climate', 'evCharging', 'gym', 'wineCellar'],
+    amenities: row.amenities ?? [],
     agent: {
       name: 'Sarah Jenkins',
       title: 'Top Rated Agent',
@@ -53,6 +54,7 @@ export function mapRowToProperty(row: PropertyRow): Property {
     badge: row.badge || undefined,
     badgeType: row.badge_type || undefined,
     isFeatured: row.is_featured,
+    isPublished: row.is_published ?? true,
     createdAt: row.created_at,
   };
 }
@@ -68,6 +70,8 @@ export interface FetchPropertiesParams {
   maxPrice?: number;
   minBeds?: number;
   minBaths?: number;
+  // Defaults to the public client; the admin dashboard passes its session client to see drafts
+  client?: SupabaseClient<Database>;
 }
 
 export interface PaginatedPropertiesResult {
@@ -93,9 +97,10 @@ function buildPropertiesQuery(
     maxPrice,
     minBeds,
     minBaths,
+    client = supabase,
   } = params;
 
-  let query = supabase.from('properties').select('*', options);
+  let query = client.from('properties').select('*', options);
 
   if (category && category !== 'All' && category !== 'Any Type') {
     query = query.ilike('category', category);
@@ -162,6 +167,7 @@ export async function getPaginatedProperties({
   maxPrice,
   minBeds,
   minBaths,
+  client,
 }: FetchPropertiesParams = {}): Promise<PaginatedPropertiesResult> {
   const currentPage = Math.max(1, Math.floor(page));
   const safePageSize = Math.max(1, Math.min(50, Math.floor(pageSize)));
@@ -178,6 +184,7 @@ export async function getPaginatedProperties({
       maxPrice,
       minBeds,
       minBaths,
+      client,
     },
     { count: 'exact' }
   );

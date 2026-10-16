@@ -1,11 +1,10 @@
 import React from 'react';
-import { AdminComingSoon } from '@/components/admin/AdminComingSoon';
+import { PropertyForm } from '@/components/admin/property-form/PropertyForm';
 import { requireAdmin } from '@/lib/auth/dal';
-import { getDictionary } from '@/i18n/dictionaries';
+import { emptyPropertyValues } from '@/lib/properties/form';
 
 export default async function AdminNewPropertyPage() {
   await requireAdmin('/admin/properties/new');
-  const t = (await getDictionary()).admin;
 
-  return <AdminComingSoon title={t.addProperty} icon="add_home" backHref="/admin" />;
+  return <PropertyForm propertyId={null} initialValues={emptyPropertyValues} />;
 }

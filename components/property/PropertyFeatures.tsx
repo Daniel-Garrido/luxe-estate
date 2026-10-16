@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Property } from '@/types/property';
 import { MortgageCalculatorModal } from '@/components/property/MortgageCalculatorModal';
+import { FormattedDescription } from '@/components/property/FormattedDescription';
 import { useI18n } from '@/i18n/I18nProvider';
 import { format, formatRich } from '@/i18n/format';
 
@@ -21,10 +22,8 @@ export const PropertyFeatures: React.FC<PropertyFeaturesProps> = ({ property }) 
   const estimatedMonthly = Math.round((price * 0.8 * 0.065) / 12);
 
   const amenityList: Record<string, string> = t.amenityList;
-  const amenities =
-    property.amenities && property.amenities.length > 0
-      ? property.amenities
-      : Object.keys(amenityList);
+  // Chosen in the admin property form; the section is hidden when there are none
+  const amenities = property.amenities ?? [];
 
   const defaultDescription =
     property.description ||
@@ -83,7 +82,7 @@ export const PropertyFeatures: React.FC<PropertyFeaturesProps> = ({ property }) 
                 directions_car
               </span>
               <span className="text-xl font-bold text-nordic">
-                {property.garage || 2}
+                {property.garage ?? 0}
               </span>
               <span className="text-xs uppercase tracking-wider text-nordic/50">
                 {t.garage}
@@ -98,36 +97,41 @@ export const PropertyFeatures: React.FC<PropertyFeaturesProps> = ({ property }) 
             {t.about}
           </h2>
           <div className="prose prose-slate max-w-none text-nordic/70 leading-relaxed text-sm sm:text-base">
-            <p className="mb-4">{defaultDescription}</p>
+            <FormattedDescription text={defaultDescription} />
             {isExpanded && <p className="animate-in fade-in duration-300">{t.extraDescription}</p>}
           </div>
-          <button
-            type="button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
-          >
-            {isExpanded ? t.readLess : t.readMore}
-            <span className="material-icons text-sm">
-              {isExpanded ? 'expand_less' : 'arrow_forward'}
-            </span>
-          </button>
+          {/* The generic extra text only completes the placeholder description */}
+          {!property.description && (
+            <button
+              type="button"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
+            >
+              {isExpanded ? t.readLess : t.readMore}
+              <span className="material-icons text-sm">
+                {isExpanded ? 'expand_less' : 'arrow_forward'}
+              </span>
+            </button>
+          )}
         </div>
 
         {/* 3. Amenities */}
-        <div className="bg-white p-6 sm:p-8 rounded-xl shadow-xs border border-mosque/5">
-          <h2 className="text-lg font-semibold mb-6 text-nordic">{t.amenities}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
-            {amenities.map((amenity) => (
-              <div key={amenity} className="flex items-center gap-3 text-nordic/80 text-sm">
-                <span className="material-icons text-mosque/80 text-sm">
-                  check_circle
-                </span>
-                {/* Known keys are translated; free text from the database is shown as-is */}
-                <span>{amenityList[amenity] ?? amenity}</span>
-              </div>
-            ))}
+        {amenities.length > 0 && (
+          <div className="bg-white p-6 sm:p-8 rounded-xl shadow-xs border border-mosque/5">
+            <h2 className="text-lg font-semibold mb-6 text-nordic">{t.amenities}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+              {amenities.map((amenity) => (
+                <div key={amenity} className="flex items-center gap-3 text-nordic/80 text-sm">
+                  <span className="material-icons text-mosque/80 text-sm">
+                    check_circle
+                  </span>
+                  {/* Known keys are translated; free text from the database is shown as-is */}
+                  <span>{amenityList[amenity] ?? amenity}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* 4. Estimated Payment Banner */}
         <div className="bg-mosque/5 p-6 rounded-xl border border-mosque/10 flex flex-col sm:flex-row items-center justify-between gap-6">

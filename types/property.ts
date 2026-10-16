@@ -34,6 +34,7 @@ export interface Property {
     lng: number;
   };
   garage?: number;
+  yearBuilt?: number;
   amenities?: string[];
   agent?: {
     name: string;
@@ -46,6 +47,8 @@ export interface Property {
   badge?: string;
   badgeType?: 'exclusive' | 'new-arrival' | 'sale' | 'rent';
   isFeatured?: boolean;
+  // Drafts are only listed in the admin dashboard
+  isPublished?: boolean;
   isSaved?: boolean;
   createdAt?: string;
 }
