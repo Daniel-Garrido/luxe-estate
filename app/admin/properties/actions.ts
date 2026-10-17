@@ -228,6 +228,31 @@ export async function saveProperty(
   redirect(`/admin?saved=${saved}`);
 }
 
+export type SetPropertyActiveResult = { ok: true } | { ok: false; error: 'forbidden' | 'failed' };
+
+// Properties are never deleted: deactivating hides them from the public site but keeps them editable here
+export async function setPropertyActive(id: string, active: boolean): Promise<SetPropertyActiveResult> {
+  const admin = await getAdminOrNull();
+  if (!admin) return { ok: false, error: 'forbidden' };
+  if (typeof id !== 'string' || !id || typeof active !== 'boolean') return { ok: false, error: 'failed' };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('properties')
+    .update({ is_active: active })
+    .eq('id', id)
+    .select('id');
+  // RLS filters out rows instead of throwing, so an empty result also means it failed
+  if (error || !data?.length) {
+    if (error) console.error('Error updating property status:', error.message);
+    return { ok: false, error: 'failed' };
+  }
+
+  // Home, listings and detail pages all read properties
+  revalidatePath('/', 'layout');
+  return { ok: true };
+}
+
 // Removes photos uploaded during this form session that were never saved (e.g. replaced or deleted)
 export async function discardUploadedImages(urls: string[]): Promise<void> {
   const admin = await getAdminOrNull();

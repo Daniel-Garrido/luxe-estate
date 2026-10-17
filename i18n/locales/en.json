@@ -276,6 +276,11 @@
       "empty": "No properties found.",
       "edit": "Edit property",
       "draft": "Draft",
+      "inactive": "Deactivated",
+      "deactivate": "Deactivate property",
+      "activate": "Reactivate property",
+      "toggling": "Saving...",
+      "toggleError": "The property could not be updated. Please try again.",
       "saved": {
         "created": "The property was published.",
         "updated": "Your changes were saved.",

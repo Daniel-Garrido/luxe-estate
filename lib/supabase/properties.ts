@@ -55,6 +55,7 @@ export function mapRowToProperty(row: PropertyRow): Property {
     badgeType: row.badge_type || undefined,
     isFeatured: row.is_featured,
     isPublished: row.is_published ?? true,
+    isActive: row.is_active ?? true,
     createdAt: row.created_at,
   };
 }
@@ -72,6 +73,8 @@ export interface FetchPropertiesParams {
   minBaths?: number;
   // Defaults to the public client; the admin dashboard passes its session client to see drafts
   client?: SupabaseClient<Database>;
+  // Admin dashboard only: also list drafts and deactivated properties (RLS still applies)
+  includeHidden?: boolean;
 }
 
 export interface PaginatedPropertiesResult {
@@ -82,6 +85,20 @@ export interface PaginatedPropertiesResult {
   totalPages: number;
   hasPrev: boolean;
   hasNext: boolean;
+}
+
+const SEARCH_COLUMNS = ['title', 'display_location', 'city', 'state', 'country', 'address'] as const;
+const MAX_SEARCH_WORDS = 8;
+
+// Splits the search box text into words. Characters with meaning in PostgREST filter
+// syntax (, . : ( ) " \) or in LIKE patterns (% _ *) would break the query or act as
+// wildcards, so they are treated as word separators.
+export function searchWords(term: string = ''): string[] {
+  const words = term
+    .toLowerCase()
+    .split(/[\s,.:()"\\%_*]+/)
+    .filter(Boolean);
+  return [...new Set(words)].slice(0, MAX_SEARCH_WORDS);
 }
 
 function buildPropertiesQuery(
@@ -98,9 +115,15 @@ function buildPropertiesQuery(
     minBeds,
     minBaths,
     client = supabase,
+    includeHidden = false,
   } = params;
 
   let query = client.from('properties').select('*', options);
+
+  // RLS already hides these from visitors; filtering here too keeps the public pages safe with any client
+  if (!includeHidden) {
+    query = query.eq('is_published', true).eq('is_active', true);
+  }
 
   if (category && category !== 'All' && category !== 'Any Type') {
     query = query.ilike('category', category);
@@ -110,10 +133,11 @@ function buildPropertiesQuery(
     query = query.eq('listing_type', listingType as 'buy' | 'rent');
   }
 
-  const effectiveTerm = (location || searchQuery || '').trim();
-  if (effectiveTerm.length > 0) {
+  // Every word must appear (case-insensitive, anywhere) in the title or the location,
+  // so "beverly villa" finds "The Beverly Ridge Villa"; each .or() call is ANDed with the others
+  for (const word of searchWords(location || searchQuery)) {
     query = query.or(
-      `title.ilike.%${effectiveTerm}%,display_location.ilike.%${effectiveTerm}%,city.ilike.%${effectiveTerm}%,state.ilike.%${effectiveTerm}%,country.ilike.%${effectiveTerm}%,address.ilike.%${effectiveTerm}%`
+      SEARCH_COLUMNS.map((column) => `${column}.ilike.%${word}%`).join(',')
     );
   }
 
@@ -168,6 +192,7 @@ export async function getPaginatedProperties({
   minBeds,
   minBaths,
   client,
+  includeHidden,
 }: FetchPropertiesParams = {}): Promise<PaginatedPropertiesResult> {
   const currentPage = Math.max(1, Math.floor(page));
   const safePageSize = Math.max(1, Math.min(50, Math.floor(pageSize)));
@@ -185,6 +210,7 @@ export async function getPaginatedProperties({
       minBeds,
       minBaths,
       client,
+      includeHidden,
     },
     { count: 'exact' }
   );
@@ -226,6 +252,8 @@ export async function getFeaturedPropertiesFromSupabase(): Promise<Property[]> {
     .from('properties')
     .select('*')
     .eq('is_featured', true)
+    .eq('is_published', true)
+    .eq('is_active', true)
     .order('created_at', { ascending: false })
     .limit(2);
 
@@ -242,6 +270,8 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     .from('properties')
     .select('*')
     .eq('slug', slug)
+    .eq('is_published', true)
+    .eq('is_active', true)
     .maybeSingle();
 
   if (error || !data) {
@@ -257,7 +287,9 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
 export async function getAllPropertySlugs(): Promise<string[]> {
   const { data, error } = await supabase
     .from('properties')
-    .select('slug');
+    .select('slug')
+    .eq('is_published', true)
+    .eq('is_active', true);
 
   if (error || !data) {
     return [];

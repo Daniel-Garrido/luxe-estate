@@ -29,6 +29,7 @@ export type Database = {
           longitude?: number | null
           is_featured: boolean
           is_published: boolean
+          is_active: boolean
           amenities: string[]
           parking: number
           year_built: number | null
@@ -59,6 +60,7 @@ export type Database = {
           longitude?: number | null
           is_featured?: boolean
           is_published?: boolean
+          is_active?: boolean
           amenities?: string[]
           parking?: number
           year_built?: number | null
@@ -89,6 +91,7 @@ export type Database = {
           longitude?: number | null
           is_featured?: boolean
           is_published?: boolean
+          is_active?: boolean
           amenities?: string[]
           parking?: number
           year_built?: number | null

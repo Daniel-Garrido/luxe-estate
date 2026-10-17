@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Property } from '@/types/property';
 import type { Dictionary } from '@/i18n/dictionaries';
 import { format } from '@/i18n/format';
+import { PropertyActiveToggle } from '@/components/admin/PropertyActiveToggle';
 
 interface AdminPropertyRowProps {
   property: Property;
@@ -14,12 +15,21 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
   const isRent = property.listingType === 'rent';
   const cover = property.images[0];
   const isDraft = property.isPublished === false;
+  const isInactive = property.isActive === false;
 
   return (
-    <tr className="border-t border-nordic-dark/5 hover:bg-clear-day/50 transition-colors">
+    <tr
+      className={`border-t border-nordic-dark/5 hover:bg-clear-day/50 transition-colors ${
+        isInactive ? 'bg-clear-day/30' : ''
+      }`}
+    >
       <td className="px-6 py-4">
         <div className="flex items-center gap-4 min-w-0">
-          <div className="w-24 h-16 sm:w-32 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-clear-day flex items-center justify-center">
+          <div
+            className={`w-24 h-16 sm:w-32 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-clear-day flex items-center justify-center ${
+              isInactive ? 'opacity-50 grayscale' : ''
+            }`}
+          >
             {cover ? (
               // Plain <img>: property photos come from several hosts
               // eslint-disable-next-line @next/next/no-img-element
@@ -39,6 +49,11 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
               {isDraft && (
                 <span className="flex-shrink-0 text-[10px] font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200 rounded px-1.5 py-0.5">
                   {t.draft}
+                </span>
+              )}
+              {isInactive && (
+                <span className="flex-shrink-0 text-[10px] font-semibold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200 rounded px-1.5 py-0.5">
+                  {t.inactive}
                 </span>
               )}
             </div>
@@ -81,8 +96,8 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
         >
           <span className="material-icons text-xl">edit</span>
         </Link>
-        {/* Drafts are not public yet, so there is nothing to view */}
-        {!isDraft && (
+        {/* Drafts and deactivated properties are not public, so there is nothing to view */}
+        {!isDraft && !isInactive && (
           <Link
             href={`/properties/${property.slug}`}
             target="_blank"
@@ -93,6 +108,11 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
             <span className="material-icons text-xl">visibility</span>
           </Link>
         )}
+        <PropertyActiveToggle
+          propertyId={property.id}
+          propertyTitle={property.title}
+          isActive={!isInactive}
+        />
       </td>
     </tr>
   );

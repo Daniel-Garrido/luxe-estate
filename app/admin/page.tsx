@@ -26,8 +26,14 @@ export default async function AdminPropertiesPage({ searchParams }: AdminPropert
   const [dict, stats, result] = await Promise.all([
     getDictionary(),
     getPropertyStats(),
-    // Session client: RLS lets admins see drafts too
-    getPaginatedProperties({ page, pageSize: PAGE_SIZE, searchQuery: q, client: await createClient() }),
+    // Session client: RLS lets admins see drafts and deactivated properties too
+    getPaginatedProperties({
+      page,
+      pageSize: PAGE_SIZE,
+      searchQuery: q,
+      client: await createClient(),
+      includeHidden: true,
+    }),
   ]);
   const t = dict.admin;
   // Set by the property form after saving

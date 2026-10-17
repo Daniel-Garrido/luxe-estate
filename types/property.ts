@@ -49,6 +49,8 @@ export interface Property {
   isFeatured?: boolean;
   // Drafts are only listed in the admin dashboard
   isPublished?: boolean;
+  // Deactivated properties are hidden from the public site instead of being deleted
+  isActive?: boolean;
   isSaved?: boolean;
   createdAt?: string;
 }

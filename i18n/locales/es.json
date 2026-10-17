@@ -276,6 +276,11 @@
       "empty": "No se encontraron propiedades.",
       "edit": "Editar propiedad",
       "draft": "Borrador",
+      "inactive": "Desactivada",
+      "deactivate": "Desactivar propiedad",
+      "activate": "Reactivar propiedad",
+      "toggling": "Guardando...",
+      "toggleError": "No se pudo actualizar la propiedad. Inténtalo de nuevo.",
       "saved": {
         "created": "La propiedad se publicó correctamente.",
         "updated": "Los cambios se guardaron correctamente.",
