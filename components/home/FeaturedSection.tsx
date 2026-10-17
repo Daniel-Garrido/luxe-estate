@@ -3,6 +3,7 @@
 import React from 'react';
 import { Property } from '@/types/property';
 import { FeaturedPropertyCard } from '@/components/cards/FeaturedPropertyCard';
+import { useI18n } from '@/i18n/I18nProvider';
 
 interface FeaturedSectionProps {
   properties: Property[];
@@ -17,7 +18,9 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({
   onFavoriteToggle,
   onViewAll,
 }) => {
-  if (properties.length === 0) return null;
+  const { dict } = useI18n();
+  const displayProperties = properties.slice(0, 2);
+  if (displayProperties.length === 0) return null;
 
   return (
     <section className="mb-16">
@@ -25,10 +28,10 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({
       <div className="flex items-end justify-between mb-8">
         <div>
           <h2 className="text-2xl font-light text-nordic-dark">
-            Featured Collections
+            {dict.featured.title}
           </h2>
           <p className="text-nordic-muted mt-1 text-sm">
-            Curated properties for the discerning eye.
+            {dict.featured.subtitle}
           </p>
         </div>
         <button
@@ -36,13 +39,13 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({
           onClick={onViewAll}
           className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity cursor-pointer"
         >
-          View all <span className="material-icons text-sm">arrow_forward</span>
+          {dict.featured.viewAll} <span className="material-icons text-sm">arrow_forward</span>
         </button>
       </div>
 
-      {/* Grid of 2 Featured Properties */}
+      {/* Grid of exactly 2 Featured Properties */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {properties.map((prop) => (
+        {displayProperties.map((prop) => (
           <FeaturedPropertyCard
             key={prop.id}
             property={prop}

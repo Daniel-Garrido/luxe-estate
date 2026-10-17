@@ -24,12 +24,15 @@ export type Database = {
           display_location: string
           formatted_price: string | null
           id: string
-          image: string
-          image_alt: string
-          images?: string[] | null
+          images: string[] | null
           latitude?: number | null
           longitude?: number | null
           is_featured: boolean
+          is_published: boolean
+          is_active: boolean
+          amenities: string[]
+          parking: number
+          year_built: number | null
           listing_type: 'buy' | 'rent'
           price: number
           price_period: string | null
@@ -52,12 +55,15 @@ export type Database = {
           display_location: string
           formatted_price?: string | null
           id: string
-          image: string
-          image_alt: string
           images?: string[] | null
           latitude?: number | null
           longitude?: number | null
           is_featured?: boolean
+          is_published?: boolean
+          is_active?: boolean
+          amenities?: string[]
+          parking?: number
+          year_built?: number | null
           listing_type: 'buy' | 'rent'
           price: number
           price_period?: string | null
@@ -80,12 +86,15 @@ export type Database = {
           display_location?: string
           formatted_price?: string | null
           id?: string
-          image?: string
-          image_alt?: string
           images?: string[] | null
           latitude?: number | null
           longitude?: number | null
           is_featured?: boolean
+          is_published?: boolean
+          is_active?: boolean
+          amenities?: string[]
+          parking?: number
+          year_built?: number | null
           listing_type?: 'buy' | 'rent'
           price?: number
           price_period?: string | null
@@ -96,15 +105,51 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          provider: string | null
+          role: Database['public']['Enums']['user_role']
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          provider?: string | null
+          role?: Database['public']['Enums']['user_role']
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          provider?: string | null
+          role?: Database['public']['Enums']['user_role']
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: 'admin' | 'broker' | 'agent' | 'viewer'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -113,3 +158,5 @@ export type Database = {
 }
 
 export type PropertyRow = Database['public']['Tables']['properties']['Row'];
+export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+export type UserRole = Database['public']['Enums']['user_role'];

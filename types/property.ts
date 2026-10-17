@@ -28,14 +28,13 @@ export interface Property {
   listingType: 'buy' | 'rent';
   location: PropertyLocation;
   specs: PropertySpecs;
-  image: string;
-  imageAlt: string;
   images: string[];
   coordinates?: {
     lat: number;
     lng: number;
   };
   garage?: number;
+  yearBuilt?: number;
   amenities?: string[];
   agent?: {
     name: string;
@@ -48,6 +47,10 @@ export interface Property {
   badge?: string;
   badgeType?: 'exclusive' | 'new-arrival' | 'sale' | 'rent';
   isFeatured?: boolean;
+  // Drafts are only listed in the admin dashboard
+  isPublished?: boolean;
+  // Deactivated properties are hidden from the public site instead of being deleted
+  isActive?: boolean;
   isSaved?: boolean;
   createdAt?: string;
 }

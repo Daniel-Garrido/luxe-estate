@@ -6,7 +6,9 @@ import { Navbar } from '@/components/layout/Navbar';
 import { PropertyGallery } from '@/components/property/PropertyGallery';
 import { PropertySidebar } from '@/components/property/PropertySidebar';
 import { PropertyFeatures } from '@/components/property/PropertyFeatures';
-import { getPropertyBySlug, getAllPropertySlugs } from '@/lib/supabase';
+import { getPropertyBySlug, getAllPropertySlugs } from '@/lib/supabase/properties';
+import { getDictionary } from '@/i18n/dictionaries';
+import { format } from '@/i18n/format';
 
 interface PropertyPageProps {
   params: Promise<{
@@ -20,22 +22,31 @@ export async function generateMetadata({
 }: PropertyPageProps): Promise<Metadata> {
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);
+  const dict = await getDictionary();
 
   if (!property) {
     return {
-      title: 'Property Not Found | Luxe Estate',
-      description: 'The requested luxury property could not be found.',
+      title: dict.meta.propertyNotFoundTitle,
+      description: dict.meta.propertyNotFoundDescription,
     };
   }
 
-  const title = `${property.title} | ${property.category} in ${property.location.displayLocation} - Luxe Estate`;
+  const category = dict.categories[property.category];
+  const title = format(dict.meta.propertyTitle, {
+    title: property.title,
+    category,
+    location: property.location.displayLocation,
+  });
   const description =
     property.description ||
-    `Discover ${property.title}, an exclusive ${property.category.toLowerCase()} with ${
-      property.specs.beds
-    } beds, ${property.specs.baths} baths, and ${property.specs.sqm} m² in ${
-      property.location.displayLocation
-    }.`;
+    format(dict.meta.propertyDescription, {
+      title: property.title,
+      category: category.toLowerCase(),
+      beds: property.specs.beds,
+      baths: property.specs.baths,
+      sqm: property.specs.sqm,
+      location: property.location.displayLocation,
+    });
 
   return {
     title,
@@ -45,10 +56,10 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: property.image,
+          url: property.images[0],
           width: 1200,
           height: 800,
-          alt: property.imageAlt || property.title,
+          alt: property.title,
         },
       ],
       type: 'website',
@@ -57,7 +68,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [property.image],
+      images: [property.images[0]],
     },
   };
 }
@@ -75,6 +86,8 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
   if (!property) {
     notFound();
   }
+
+  const dict = await getDictionary();
 
   // Schema.org JSON-LD Structured Data for Google Rich Snippets
   const jsonLd = {
@@ -134,11 +147,12 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
             <span className="material-icons text-base transition-transform group-hover:-translate-x-1">
               arrow_back
             </span>
-            <span>Back to all properties</span>
+            <span>{dict.property.backToAll}</span>
           </Link>
 
           <span className="text-xs uppercase tracking-wider text-nordic-muted bg-white px-3 py-1 rounded-full border border-slate-200">
-            {property.category} • {property.listingType === 'rent' ? 'For Rent' : 'For Sale'}
+            {dict.categories[property.category]} •{' '}
+            {property.listingType === 'rent' ? dict.listing.forRent : dict.listing.forSale}
           </span>
         </div>
 
@@ -173,18 +187,18 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-mosque text-xl">villa</span>
             <span className="text-sm text-nordic-muted">
-              © {new Date().getFullYear()} LuxeEstate Inc. All rights reserved.
+              {format(dict.property.footer.rights, { year: new Date().getFullYear() })}
             </span>
           </div>
           <div className="flex gap-6">
             <Link href="/" className="text-xs text-nordic-muted hover:text-mosque transition-colors">
-              Privacy Policy
+              {dict.property.footer.privacy}
             </Link>
             <Link href="/" className="text-xs text-nordic-muted hover:text-mosque transition-colors">
-              Terms of Service
+              {dict.property.footer.terms}
             </Link>
             <Link href="/" className="text-xs text-nordic-muted hover:text-mosque transition-colors">
-              Contact
+              {dict.property.footer.contact}
             </Link>
           </div>
         </div>

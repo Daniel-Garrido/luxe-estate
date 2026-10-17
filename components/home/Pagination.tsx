@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import { getDictionary } from '@/i18n/dictionaries';
+import { formatRich } from '@/i18n/format';
 
 interface PaginationProps {
   currentPage: number;
@@ -9,9 +11,14 @@ interface PaginationProps {
   category?: string;
   listingType?: string;
   searchQuery?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  beds?: number;
+  baths?: number;
+  amenities?: string[];
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
+export const Pagination = async ({
   currentPage,
   totalPages,
   totalCount,
@@ -19,10 +26,17 @@ export const Pagination: React.FC<PaginationProps> = ({
   category = 'All',
   listingType = 'all',
   searchQuery = '',
-}) => {
+  minPrice,
+  maxPrice,
+  beds,
+  baths,
+  amenities,
+}: PaginationProps) => {
   if (totalPages <= 1 && totalCount <= pageSize) {
     return null;
   }
+
+  const t = (await getDictionary()).pagination;
 
   const createPageUrl = (pageNumber: number) => {
     const params = new URLSearchParams();
@@ -37,6 +51,21 @@ export const Pagination: React.FC<PaginationProps> = ({
     }
     if (searchQuery && searchQuery.trim().length > 0) {
       params.set('q', searchQuery.trim());
+    }
+    if (minPrice && minPrice > 0) {
+      params.set('minPrice', String(minPrice));
+    }
+    if (maxPrice && maxPrice < 20000000) {
+      params.set('maxPrice', String(maxPrice));
+    }
+    if (beds && beds > 0) {
+      params.set('beds', String(beds));
+    }
+    if (baths && baths > 0) {
+      params.set('baths', String(baths));
+    }
+    if (amenities && amenities.length > 0) {
+      params.set('amenities', amenities.join(','));
     }
 
     const query = params.toString();
@@ -79,14 +108,16 @@ export const Pagination: React.FC<PaginationProps> = ({
     <div className="mt-14 pt-8 border-t border-nordic-dark/10 flex flex-col sm:flex-row items-center justify-between gap-4">
       {/* Information text */}
       <div className="text-sm text-nordic-muted order-2 sm:order-1">
-        Showing <span className="font-semibold text-nordic-dark">{startItem}</span> to{' '}
-        <span className="font-semibold text-nordic-dark">{endItem}</span> of{' '}
-        <span className="font-semibold text-nordic-dark">{totalCount}</span> properties
+        {formatRich(t.showing, {
+          start: <span className="font-semibold text-nordic-dark">{startItem}</span>,
+          end: <span className="font-semibold text-nordic-dark">{endItem}</span>,
+          total: <span className="font-semibold text-nordic-dark">{totalCount}</span>,
+        })}
       </div>
 
       {/* Pagination controls */}
       <nav
-        aria-label="Server-side Properties Pagination"
+        aria-label={t.ariaLabel}
         className="inline-flex items-center gap-1.5 order-1 sm:order-2 bg-white/80 backdrop-blur-xs p-1.5 rounded-xl border border-nordic-dark/10 shadow-xs"
       >
         {/* Previous Button */}
@@ -95,10 +126,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             href={createPageUrl(currentPage - 1)}
             scroll={false}
             className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-nordic-dark hover:text-mosque hover:bg-hint-green/30 rounded-lg transition-colors"
-            aria-label="Previous page"
+            aria-label={t.prevPage}
           >
             <span className="material-icons text-base">chevron_left</span>
-            <span className="hidden xs:inline">Prev</span>
+            <span className="hidden xs:inline">{t.prev}</span>
           </Link>
         ) : (
           <span
@@ -106,7 +137,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             aria-disabled="true"
           >
             <span className="material-icons text-base">chevron_left</span>
-            <span className="hidden xs:inline">Prev</span>
+            <span className="hidden xs:inline">{t.prev}</span>
           </span>
         )}
 
@@ -154,9 +185,9 @@ export const Pagination: React.FC<PaginationProps> = ({
             href={createPageUrl(currentPage + 1)}
             scroll={false}
             className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-nordic-dark hover:text-mosque hover:bg-hint-green/30 rounded-lg transition-colors"
-            aria-label="Next page"
+            aria-label={t.nextPage}
           >
-            <span className="hidden xs:inline">Next</span>
+            <span className="hidden xs:inline">{t.next}</span>
             <span className="material-icons text-base">chevron_right</span>
           </Link>
         ) : (
@@ -164,7 +195,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-nordic-muted/40 cursor-not-allowed select-none rounded-lg"
             aria-disabled="true"
           >
-            <span className="hidden xs:inline">Next</span>
+            <span className="hidden xs:inline">{t.next}</span>
             <span className="material-icons text-base">chevron_right</span>
           </span>
         )}
