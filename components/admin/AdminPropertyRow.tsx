@@ -9,7 +9,6 @@ interface AdminPropertyRowProps {
   property: Property;
   dict: Dictionary;
 }
-
 export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, dict }) => {
   const t = dict.admin.properties;
   const isRent = property.listingType === 'rent';
@@ -19,16 +18,14 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
 
   return (
     <tr
-      className={`border-t border-nordic-dark/5 hover:bg-clear-day/50 transition-colors ${
-        isInactive ? 'bg-clear-day/30' : ''
-      }`}
+      className={`border-t border-nordic-dark/5 hover:bg-clear-day/50 transition-colors ${isInactive ? 'bg-clear-day/30' : ''
+        }`}
     >
       <td className="px-6 py-4">
         <div className="flex items-center gap-4 min-w-0">
           <div
-            className={`w-24 h-16 sm:w-32 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-clear-day flex items-center justify-center ${
-              isInactive ? 'opacity-50 grayscale' : ''
-            }`}
+            className={`w-24 h-16 sm:w-32 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-clear-day flex items-center justify-center ${isInactive ? 'opacity-50 grayscale' : ''
+              }`}
           >
             {cover ? (
               // Plain <img>: property photos come from several hosts
@@ -79,9 +76,8 @@ export const AdminPropertyRow: React.FC<AdminPropertyRowProps> = ({ property, di
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-            isRent ? 'bg-orange-50 text-orange-700' : 'bg-hint-green text-mosque'
-          }`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${isRent ? 'bg-orange-50 text-orange-700' : 'bg-hint-green text-mosque'
+            }`}
         >
           <span className={`w-1.5 h-1.5 rounded-full ${isRent ? 'bg-orange-500' : 'bg-mosque'}`} />
           {isRent ? dict.listing.forRent : dict.listing.forSale}
